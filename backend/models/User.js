@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../services/sequelize');
+const Admin = require('./Admin');
 
 const User = sequelize.define('User', {
     id_user: {
@@ -29,5 +30,12 @@ const User = sequelize.define('User', {
 },{
     timestamps: false,
 });
+
+User.hasOne(Admin, {
+    foreignKey: 'id_user',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+Admin.belongsTo(User, { foreignKey: 'id_user'});
 
 module.exports = User;
