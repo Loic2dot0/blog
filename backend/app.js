@@ -1,5 +1,5 @@
 const express = require('express');
-const sequelize = require('./services/sequelize');
+const userRoutes = require('./routes/user');
 
 const app = express();
 
@@ -12,8 +12,6 @@ app.use((req, res, next) => {
 
 app.use(express.json());
 
-app.use((req, res, next) => {
-    res.json({message: 'Your request was successful!'});
-});
+app.use('/auth', userRoutes);
 
 module.exports = app;
