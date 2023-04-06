@@ -1,6 +1,7 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../services/sequelize');
 const PostComment = require('./PostComment');
+const PostReaction = require('./PostReaction');
 
 const Post = sequelize.define('Post', {
     id_post: {
@@ -35,7 +36,14 @@ Post.hasMany(PostComment,{
     foreignKey: 'id_post',
     onDelete: 'CASCADE',
     onUpdate: 'CASCADE'
-})
+});
 PostComment.belongsTo(Post, { foreignKey: 'id_post'});
+
+Post.hasMany(PostReaction,{
+    foreignKey: 'id_post',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+});
+PostReaction.belongsTo(Post, { foreignKey: 'id_post'});
 
 module.exports = Post;

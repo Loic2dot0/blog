@@ -3,6 +3,7 @@ const sequelize = require('../services/sequelize');
 const Admin = require('./Admin');
 const Post = require('./Post');
 const PostComment = require('./PostComment');
+const PostReaction = require('./PostReaction');
 
 const User = sequelize.define('User', {
     id_user: {
@@ -43,15 +44,22 @@ Admin.belongsTo(User, { foreignKey: 'id_user'});
 User.hasMany(Post, {
     foreignKey: 'id_user',
     onDelete: 'SET NULL',
-    onUpdate: 'SET NULL'
+    onUpdate: 'CASCADE'
 });
 Post.belongsTo(User, { foreignKey: 'id_user'});
 
 User.hasMany(PostComment, {
     foreignKey: 'id_user',
     onDelete: 'SET NULL',
-    onUpdate: 'SET NULL'
+    onUpdate: 'CASCADE'
 });
 PostComment.belongsTo(User, { foreignKey: 'id_user'});
+
+User.hasMany(PostReaction, {
+    foreignKey: 'id_user',
+    onDelete: 'NO ACTION',
+    onUpdate: 'CASCADE'
+});
+PostReaction.belongsTo(User, { foreignKey: 'id_user'});
 
 module.exports = User;
