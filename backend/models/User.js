@@ -1,6 +1,8 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../services/sequelize');
 const Admin = require('./Admin');
+const Post = require('./Post');
+const PostComment = require('./PostComment');
 
 const User = sequelize.define('User', {
     id_user: {
@@ -37,5 +39,19 @@ User.hasOne(Admin, {
     onUpdate: 'CASCADE'
 });
 Admin.belongsTo(User, { foreignKey: 'id_user'});
+
+User.hasMany(Post, {
+    foreignKey: 'id_user',
+    onDelete: 'SET NULL',
+    onUpdate: 'SET NULL'
+});
+Post.belongsTo(User, { foreignKey: 'id_user'});
+
+User.hasMany(PostComment, {
+    foreignKey: 'id_user',
+    onDelete: 'SET NULL',
+    onUpdate: 'SET NULL'
+});
+PostComment.belongsTo(User, { foreignKey: 'id_user'});
 
 module.exports = User;

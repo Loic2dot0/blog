@@ -1,5 +1,6 @@
 const { DataTypes } = require('sequelize');
 const sequelize = require('../services/sequelize');
+const PostComment = require('./PostComment');
 
 const Post = sequelize.define('Post', {
     id_post: {
@@ -10,7 +11,6 @@ const Post = sequelize.define('Post', {
     },      
     id_user: {  // id de l'utilisateur  (clé étrangère)     
         type: DataTypes.UUID,
-        allowNull: false,
     },          
     id_category: {  // id de la catégorie  (clé étrangère)
         type: DataTypes.UUID,
@@ -22,7 +22,6 @@ const Post = sequelize.define('Post', {
     },      
     content: {
         type: DataTypes.TEXT,
-        allowNull: false,
     },  
     publish: {
         type: DataTypes.BOOLEAN,
@@ -30,6 +29,13 @@ const Post = sequelize.define('Post', {
     },              
 }, {
     // options
-});     
+});
+
+Post.hasMany(PostComment,{
+    foreignKey: 'id_post',
+    onDelete: 'CASCADE',
+    onUpdate: 'CASCADE'
+})
+PostComment.belongsTo(Post, { foreignKey: 'id_post'});
 
 module.exports = Post;

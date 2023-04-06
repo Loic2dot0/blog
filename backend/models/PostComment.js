@@ -14,7 +14,6 @@ const PostComment = sequelize.define('Post_Comment', {
     },
     id_user: {  // id de l'utilisateur  (clé étrangère) 
         type: DataTypes.UUID,
-        allowNull: false,
     },      
     content: {
         type: DataTypes.TEXT,
