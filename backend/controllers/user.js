@@ -1,4 +1,5 @@
 const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const User = require('../models/user');
 
@@ -40,7 +41,7 @@ exports.login = (req, res, next) => {
                     }
                     res.json({
                         userId: user.id_user,
-                        token: 'TOKEN'
+                        token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: '24h' })
                     });
                 })
                 .catch(error => res.status(500).json({error}));
