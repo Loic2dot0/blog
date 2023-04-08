@@ -66,3 +66,21 @@ exports.getUser = (req, res, next) => {
         })
         .catch(error => res.status(500).json({error: error}));
 };
+
+exports.updateUser = async (req, res, next) => {
+    const user = await User.findOne({
+        where: {
+            id_user: req.headers.userid
+        }
+    });
+
+    if (!user) return res.status(404).json({error: 'User not found!'});
+
+    user.name = req.body.name;
+            
+    user.save()
+        .then(() => {
+            res.status(200).json({message: 'User updated!'});
+        })
+        .catch(error => res.status(500).json({error: error}));
+};
