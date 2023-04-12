@@ -1,6 +1,7 @@
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
+const fs = require('fs');
 const User = require('../models/user');
 
 exports.signup = (req, res, next) => {
@@ -76,6 +77,15 @@ exports.updateUser = async (req, res, next) => {
 
     if (!user) return res.status(404).json({error: 'User not found!'});
 
+    if(req.file) {
+        if(user.avatar){
+            const filepath = user.avatar.split('/upload/')[1];
+            fs.unlink(`upload/${filepath}`, (err) => {
+                if (err) throw err;
+            });
+        }
+        user.avatar = `${req.protocol}://${req.get('host')}/${req.file.path.replace(/\\/g, '/')}`;
+    }
     user.name = req.body.name;
             
     user.save()
