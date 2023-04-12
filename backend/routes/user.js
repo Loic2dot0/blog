@@ -5,14 +5,11 @@ const auth = require('../middleware/auth');
 const multer = require('../middleware/multer');
 const userCtrl = require('../controllers/user');
 
-// Route globale
+// Route user
 router.post('/signup', userCtrl.signup);
 router.post('/login', userCtrl.login);
-router.get('/user', auth, userCtrl.getUser);
-router.put('/user', auth, multer, userCtrl.updateUser);
-router.delete('/user', auth, userCtrl.deleteUser);
-
-// Routes réservée aux administrateurs
-router.post('/admin/login', userCtrl.loginAdmin);
+router.get('/', auth, userCtrl.getUser);
+router.put('/', auth, multer, userCtrl.updateUser);
+router.delete('/', auth, userCtrl.deleteUser);
 
 module.exports = router;
