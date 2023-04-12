@@ -1,6 +1,17 @@
 const multer = require('multer');
 const path = require('path');
 
+const MIME_TYPES_IMAGES = ['image/jpg', 'image/jpeg', 'image/png', 'image/gif', 'image/webp'];
+const MIME_TYPES_VIDEOS = ['video/mp4', 'video/ogg', 'video/webm'];
+
+const fileFilter = (req, file, cb) => {
+    if(MIME_TYPES_IMAGES.includes(file.mimetype)){
+        cb(null, true);
+    } else {
+        cb(new Error('File types not allowed'), false);
+    }
+}
+
 const storageAvatar = multer.diskStorage({
     destination: (req, file, cb) => {
         cb(null, './upload/avatars');
@@ -12,4 +23,4 @@ const storageAvatar = multer.diskStorage({
     }
 });
 
-module.exports = multer({storage: storageAvatar}).single('avatar');
+module.exports = multer({fileFilter, storage: storageAvatar}).single('avatar');
