@@ -33,14 +33,12 @@ exports.login = (req, res, next) => {
             }
         })
         .then(user => {
-            if(user === null){
-                return res.status(404).json({error: 'User not found!'});
-            }
+            if(!user) return res.status(404).json({error: 'User not found!'});
+            
             bcrypt.compare(req.body.password, user.password)
                 .then(valid =>{
-                    if(!valid){
-                        return res.status(401).json({error: 'Incorrect password!'});
-                    }
+                    if(!valid) return res.status(401).json({error: 'Incorrect password!'});
+                    
                     res.status(200).json({
                         userId: user.id_user,
                         token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: '24h' })
@@ -58,9 +56,8 @@ exports.getUser = (req, res, next) => {
             }
         })
         .then(user => {
-            if (user == null) {
-                return res.status(404).json({error: 'User not found!'});
-            }
+            if(!user) return res.status(404).json({error: 'User not found!'});
+
             res.status(200).json({
                 name: user.name,
                 avatar: user.avatar
@@ -152,9 +149,8 @@ exports.loginAdmin = async (req, res, next) => {
 
     bcrypt.compare(req.body.password, user.password)
         .then(valid =>{
-            if(!valid){
-                return res.status(401).json({error: 'Incorrect password!'});
-            }
+            if(!valid) return res.status(401).json({error: 'Incorrect password!'});
+            
             res.status(200).json({
                 userId: user.id_user,
                 token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: '24h' })
