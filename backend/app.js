@@ -2,6 +2,7 @@ const express = require('express');
 const path = require('path');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
+const postRoutes = require('./routes/post');
 
 const app = express();
 
@@ -17,5 +18,6 @@ app.use(express.json());
 app.use('/upload', express.static(path.join(__dirname, 'upload')));
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
+app.use('/post', postRoutes);
 
 module.exports = app;
