@@ -69,3 +69,17 @@ exports.getPostsFull = (req, res, next) => {
         })
         .catch(error => res.status(500).json({error: error}));
 };
+
+// Get one post
+exports.getOnePostFull = (req, res, next) => {
+    Post.findOne({
+            where: {
+                id_post: req.params.id_post
+            }
+        })
+        .then(post => {
+            if(!post) return res.status(404).json({error: 'Post not found!'});
+            res.status(200).json(post);
+        })
+        .catch(error => res.status(500).json({error: error}));
+}

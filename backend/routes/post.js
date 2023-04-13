@@ -11,5 +11,6 @@ router.post('/', auth, authAdmin, postctrl.createPost);
 router.put('/:id_post', auth, authAdmin, postctrl.updatePost);
 router.delete('/:id_post', auth, authAdmin, postctrl.deletePost);
 router.get('/full', auth, authAdmin, postctrl.getPostsFull);
+router.get('/full/:id_post', auth, authAdmin, postctrl.getOnePostFull);
 
 module.exports = router;
