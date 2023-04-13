@@ -13,4 +13,8 @@ router.delete('/:id_post', auth, authAdmin, postctrl.deletePost);
 router.get('/full', auth, authAdmin, postctrl.getPostsFull);
 router.get('/full/:id_post', auth, authAdmin, postctrl.getOnePostFull);
 
+// Routes posts all users
+router.get('/', postctrl.getPosts);
+router.get('/:id_post', postctrl.getOnePost);
+
 module.exports = router;

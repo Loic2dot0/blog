@@ -83,3 +83,36 @@ exports.getOnePostFull = (req, res, next) => {
         })
         .catch(error => res.status(500).json({error: error}));
 }
+
+// Get all posts with status publish=true only, updateAt in descending order
+exports.getPosts = (req, res, next) => {
+    const page = req.query.page ? req.query.page : 1;
+    const category = req.query.category ? req.query.category : null;
+    const where = category ? {publish: true, id_category: category} : {publish: true};
+    
+    Post.findAndCountAll({
+            where,
+            order: [['updatedAt', 'DESC']],
+            limit: 10,
+            offset: (page - 1) * 10,
+        })
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(error => res.status(500).json({error: error}));
+};
+
+// Get one post width status publish=true only
+exports.getOnePost = (req, res, next) => {
+    Post.findOne({
+            where: {
+                id_post: req.params.id_post,
+                publish: true
+            }
+        })
+        .then(post => {
+            if(!post) return res.status(404).json({error: 'Post not found!'});
+            res.status(200).json(post);
+        })
+        .catch(error => res.status(500).json({error: error}));
+}
