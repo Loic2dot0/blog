@@ -8,7 +8,7 @@ const postctrl = require('../controllers/post');
 
 // Routes posts admin only
 router.post('/', auth, authAdmin, postctrl.createPost);
-router.put('/:id', auth, authAdmin, postctrl.updatePost);
-router.delete('/:id', auth, authAdmin, postctrl.deletePost);
+router.put('/:id_post', auth, authAdmin, postctrl.updatePost);
+router.delete('/:id_post', auth, authAdmin, postctrl.deletePost);
 
 module.exports = router;

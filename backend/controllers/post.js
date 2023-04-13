@@ -4,7 +4,7 @@ const Post = require('../models/Post');
 exports.createPost = (req, res, next) => {
     Post.create({
             id_user: req.headers.userid,
-            id_category: req.body.id_category,
+            id_category: req.body.id_category && req.body.id_category != '' ? req.body.id_category : null,
             title: req.body.title,
             content: req.body.content,
         })
@@ -22,7 +22,7 @@ exports.updatePost = async (req, res, next) => {
 
     if (!post) return res.status(404).json({error: 'Post not found!'});
 
-    if(req.body.id_category) post.id_category = req.body.id_category;
+    if(req.body.id_category) post.id_category = req.body.id_category != '' ? req.body.id_category : null;
     if(req.body.title) post.title = req.body.title;
     if(req.body.content) post.content = req.body.content;
     if(req.body.publish) post.publish = req.body.publish;
@@ -39,7 +39,7 @@ exports.deletePost = async (req, res, next) => {
             id_post: req.params.id_post
         }
     });
-    
+
     if (!post) return res.status(404).json({error: 'Post not found!'});
 
     Post.destroy({
