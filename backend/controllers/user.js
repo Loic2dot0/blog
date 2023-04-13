@@ -4,6 +4,7 @@ const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const User = require('../models/User');
 
+// signup a new user
 exports.signup = (req, res, next) => {
     const saltRounds = 10;
     const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
@@ -22,6 +23,7 @@ exports.signup = (req, res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
+// login to the user account
 exports.login = (req, res, next) => {
     const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
     const iv = CryptoJS.enc.Hex.parse(process.env.CRYPTO_IV);
@@ -48,6 +50,7 @@ exports.login = (req, res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
+// get actual user
 exports.getUser = (req, res, next) => {
     User.findOne({
             where: {
@@ -65,6 +68,7 @@ exports.getUser = (req, res, next) => {
         .catch(error => res.status(500).json({error: error}));
 };
 
+// update actual user
 exports.updateUser = async (req, res, next) => {
     const user = await User.findOne({
         where: {
@@ -92,6 +96,7 @@ exports.updateUser = async (req, res, next) => {
         .catch(error => res.status(500).json({error: error}));
 };
 
+// delete actual user
 exports.deleteUser = async (req, res, next) => {
     const user = await User.findOne({
         where: {
@@ -106,6 +111,34 @@ exports.deleteUser = async (req, res, next) => {
     User.destroy({
         where: {
                 id_user: req.headers.userid
+            }
+        })
+        .then(() => {
+            if(avatarPath){
+                fs.unlink(`upload/${avatarPath}`, (err) => {
+                    if(err) throw err;
+                });
+            }            
+            res.status(200).json({message: 'User deleted!'});
+        })
+        .catch(error => res.status(500).json({error: error}));
+};
+
+// delete a user where id_user = req.params.id_user
+exports.deleteAUser = async (req, res, next) => {
+    const user = await User.findOne({
+        where: {
+            id_user: req.params.id_user
+        }
+    });
+
+    if (!user) return res.status(404).json({error: 'User not found!'});
+
+    const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
+    
+    User.destroy({
+        where: {
+                id_user: req.params.id_user
             }
         })
         .then(() => {

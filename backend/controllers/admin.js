@@ -4,6 +4,7 @@ const CryptoJS = require('crypto-js');
 const User = require('../models/User');
 const Admin = require('../models/Admin');
 
+// login to the admin panel
 exports.loginAdmin = async (req, res, next) => {
     const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
     const iv = CryptoJS.enc.Hex.parse(process.env.CRYPTO_IV);
