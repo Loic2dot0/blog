@@ -29,7 +29,7 @@ exports.updatePost = async (req, res, next) => {
     
     post.save()
         .then(() => res.status(200).json({message: 'Post modified!', publish : post.publish}))
-        .catch(error => res.status(400).json({error: error}));
+        .catch(error => res.status(500).json({error: error}));
 };
 
 // Delete a post        
@@ -48,5 +48,24 @@ exports.deletePost = async (req, res, next) => {
             }
         })
         .then(() => res.status(200).json({message: 'Post deleted!'}))
-        .catch(error => res.status(400).json({error: error}));
+        .catch(error => res.status(500).json({error: error}));
+};
+
+// Get all posts with status publish= false in first and updateAt in descending order
+exports.getPostsFull = (req, res, next) => {
+    const page = req.query.page ? req.query.page : 1;
+    const category = req.query.category ? req.query.category : null;
+    const where = category ? {id_category: category} : {};
+
+    Post.findAndCountAll({
+            where,
+            order: [['publish', 'ASC'],
+                    ['updatedAt', 'DESC']],
+            limit: 10,
+            offset: (page - 1) * 10,
+        })
+        .then(posts => {
+            res.status(200).json(posts);
+        })
+        .catch(error => res.status(500).json({error: error}));
 };
