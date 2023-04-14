@@ -20,6 +20,6 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/post', postRoutes);
-app.use('/category', postCategoryRoutes);
+app.use('/postcategory', postCategoryRoutes);
 
 module.exports = app;
