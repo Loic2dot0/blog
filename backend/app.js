@@ -3,6 +3,7 @@ const path = require('path');
 const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const postRoutes = require('./routes/post');
+const postCategoryRoutes = require('./routes/postCategory');
 
 const app = express();
 
@@ -19,5 +20,6 @@ app.use('/upload', express.static(path.join(__dirname, 'upload')));
 app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/post', postRoutes);
+app.use('/category', postCategoryRoutes);
 
 module.exports = app;
