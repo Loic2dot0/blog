@@ -11,7 +11,7 @@ exports.createPost = (req, res, next) => {
             content: req.body.content,
         })
         .then(() => res.status(201).json({message: 'Post created!'}))
-        .catch(error => res.status(400).json({error: error}));
+        .catch(error => res.status(500).json({error: error}));
 };
 
 // Update a post
