@@ -2,7 +2,7 @@ const { DataTypes } = require('sequelize');
 const sequelize = require('../services/sequelize');
 const Post = require('./Post');
 
-const PostCategory = sequelize.define('PostCategory', {
+const PostCategory = sequelize.define('Post_Category', {
     id_category: {
         type: DataTypes.UUID,
         defaultValue: DataTypes.UUIDV4,

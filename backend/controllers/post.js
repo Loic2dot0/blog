@@ -1,4 +1,6 @@
 const Post = require('../models/Post');
+const PostCategory = require('../models/PostCategory');
+const User = require('../models/User');
 
 // Create a new post
 exports.createPost = (req, res, next) => {
@@ -59,6 +61,14 @@ exports.getPostsFull = (req, res, next) => {
 
     Post.findAndCountAll({
             where,
+            include: [{
+                model: PostCategory,
+                attributes: ['category']
+            },
+            {
+                model: User,
+                attributes: ['name']
+            }],
             order: [['publish', 'ASC'],
                     ['updatedAt', 'DESC']],
             limit: 10,
@@ -75,7 +85,15 @@ exports.getOnePostFull = (req, res, next) => {
     Post.findOne({
             where: {
                 id_post: req.params.id_post
-            }
+            },
+            include: [{
+                model: PostCategory,
+                attributes: ['category']
+            },
+            {
+                model: User,
+                attributes: ['name']
+            }],
         })
         .then(post => {
             if(!post) return res.status(404).json({error: 'Post not found!'});
@@ -92,6 +110,14 @@ exports.getPosts = (req, res, next) => {
     
     Post.findAndCountAll({
             where,
+            include: [{
+                model: PostCategory,
+                attributes: ['category']
+            },
+            {
+                model: User,
+                attributes: ['name']
+            }],
             order: [['updatedAt', 'DESC']],
             limit: 10,
             offset: (page - 1) * 10,
@@ -108,7 +134,15 @@ exports.getOnePost = (req, res, next) => {
             where: {
                 id_post: req.params.id_post,
                 publish: true
-            }
+            },
+            include: [{
+                model: PostCategory,
+                attributes: ['category']
+            },
+            {
+                model: User,
+                attributes: ['name']
+            }],
         })
         .then(post => {
             if(!post) return res.status(404).json({error: 'Post not found!'});
