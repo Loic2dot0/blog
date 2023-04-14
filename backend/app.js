@@ -4,6 +4,7 @@ const userRoutes = require('./routes/user');
 const adminRoutes = require('./routes/admin');
 const postRoutes = require('./routes/post');
 const postCategoryRoutes = require('./routes/postCategory');
+const postCommentRoutes = require('./routes/postComment');
 
 const app = express();
 
@@ -21,5 +22,6 @@ app.use('/user', userRoutes);
 app.use('/admin', adminRoutes);
 app.use('/post', postRoutes);
 app.use('/postcategory', postCategoryRoutes);
+app.use('/postcomment', postCommentRoutes);
 
 module.exports = app;
