@@ -12,7 +12,7 @@ router.put('/:id_comment', auth, postCommentCtrl.updateComment);
 router.delete('/:id_comment', auth, postCommentCtrl.deleteComment);
 
 // Routes comments all users
-router.get('/', postCommentCtrl.getComments);
+router.get('/post/:id_post', postCommentCtrl.getComments);
 router.get('/:id_comment', postCommentCtrl.getOneComment);
 
 // Routes comments admin only
