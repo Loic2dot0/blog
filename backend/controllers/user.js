@@ -42,6 +42,8 @@ exports.login = (req, res, next) => {
                     
                     res.status(200).json({
                         userId: user.id_user,
+                        name: user.name,
+                        avatar: user.avatar,
                         token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: '24h' })
                     });
                 })
@@ -70,13 +72,18 @@ exports.getUser = (req, res, next) => {
 
 // update actual user
 exports.updateUser = async (req, res, next) => {
-    const user = await User.findOne({
-        where: {
-            id_user: req.headers.userid
-        }
-    });
-
-    if (!user) return res.status(404).json({error: 'User not found!'});
+    let user;
+    try{
+        user = await User.findOne({
+            where: {
+                id_user: req.headers.userid
+            }
+        });
+        
+        if (!user) return res.status(404).json({error: 'User not found!'});
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
 
     if(req.file) {
         if(user.avatar){
@@ -91,20 +98,29 @@ exports.updateUser = async (req, res, next) => {
             
     user.save()
         .then(() => {
-            res.status(200).json({message: 'User updated!'});
+            res.status(200).json({
+                message: 'User updated!',
+                name: user.name,
+                avatar: user.avatar
+            });
         })
         .catch(error => res.status(500).json({error: error}));
 };
 
 // delete actual user
 exports.deleteUser = async (req, res, next) => {
-    const user = await User.findOne({
-        where: {
-            id_user: req.headers.userid
-        }
-    });
-
-    if (!user) return res.status(404).json({error: 'User not found!'});
+    let user;
+    try{
+        user = await User.findOne({
+            where: {
+                id_user: req.headers.userid
+            }
+        });
+        
+        if (!user) return res.status(404).json({error: 'User not found!'});
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
 
     const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
     
@@ -126,15 +142,20 @@ exports.deleteUser = async (req, res, next) => {
 
 // delete a user where id_user = req.params.id_user
 exports.deleteAUser = async (req, res, next) => {
-    const user = await User.findOne({
-        where: {
-            id_user: req.params.id_user
-        }
-    });
-
-    if (!user) return res.status(404).json({error: 'User not found!'});
-
-    const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
+    let user;
+    try{
+        user = await User.findOne({
+            where: {
+                id_user: req.params.id_user
+            }
+        });
+        
+        if (!user) return res.status(404).json({error: 'User not found!'});
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
+   
+   const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
     
     User.destroy({
         where: {
