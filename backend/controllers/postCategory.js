@@ -11,13 +11,18 @@ exports.createCategory = (req, res, next) => {
 
 // Update a category
 exports.updateCategory = async (req, res, next) => {
-    const category = await PostCategory.findOne({
-        where: {
-            id_category: req.params.id_category
-        }
-    });
-
-    if (!category) return res.status(404).json({error: 'Category not found!'});
+    let category;
+    try {
+        category = await PostCategory.findOne({
+            where: {
+                id_category: req.params.id_category
+            }
+        });
+    
+        if (!category) return res.status(404).json({error: 'Category not found!'});
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }
 
     if(req.body.category) category.category = req.body.category;
     
@@ -28,13 +33,18 @@ exports.updateCategory = async (req, res, next) => {
 
 // Delete a category
 exports.deleteCategory = async (req, res, next) => {
-    const category = await PostCategory.findOne({
-        where: {
-            id_category: req.params.id_category
-        }
-    });
-
-    if (!category) return res.status(404).json({error: 'Category not found!'});
+    let category;
+    try {
+        category = await PostCategory.findOne({
+            where: {
+                id_category: req.params.id_category
+            }
+        });
+    
+        if (!category) return res.status(404).json({error: 'Category not found!'});
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }
 
     PostCategory.destroy({
             where: {
