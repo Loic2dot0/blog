@@ -16,13 +16,17 @@ exports.createPost = (req, res, next) => {
 
 // Update a post
 exports.updatePost = async (req, res, next) => {
-    const post = await Post.findOne({
-        where: {
-            id_post: req.params.id_post
-        }
-    });
-
-    if (!post) return res.status(404).json({error: 'Post not found!'});
+    let post;
+    try {
+        post = await Post.findOne({
+            where: {
+                id_post: req.params.id_post
+            }
+        });
+        if (!post) return res.status(404).json({error: 'Post not found!'});
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }    
 
     if(req.body.id_category) post.id_category = req.body.id_category != '' ? req.body.id_category : null;
     if(req.body.title) post.title = req.body.title;
@@ -36,13 +40,17 @@ exports.updatePost = async (req, res, next) => {
 
 // Delete a post        
 exports.deletePost = async (req, res, next) => {
-    const post = await Post.findOne({
-        where: {
-            id_post: req.params.id_post
-        }
-    });
-
-    if (!post) return res.status(404).json({error: 'Post not found!'});
+    let post;
+    try {
+        post = await Post.findOne({
+            where: {
+                id_post: req.params.id_post
+            }
+        });
+        if (!post) return res.status(404).json({error: 'Post not found!'});
+    } catch (error) {
+        return res.status(500).json({error : error});
+    } 
 
     Post.destroy({
             where: {
