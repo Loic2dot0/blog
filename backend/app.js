@@ -5,6 +5,7 @@ const adminRoutes = require('./routes/admin');
 const postRoutes = require('./routes/post');
 const postCategoryRoutes = require('./routes/postCategory');
 const postCommentRoutes = require('./routes/postComment');
+const postReactionRoutes = require('./routes/postReaction');
 
 const app = express();
 
@@ -23,5 +24,6 @@ app.use('/admin', adminRoutes);
 app.use('/post', postRoutes);
 app.use('/postcategory', postCategoryRoutes);
 app.use('/postcomment', postCommentRoutes);
+app.use('/postreaction', postReactionRoutes);
 
 module.exports = app;
