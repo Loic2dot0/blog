@@ -39,7 +39,6 @@ exports.createOrUpdateReaction = async (req, res, next) => {
 // Get all reactions of a post
 exports.getAllReactions = async (req, res, next) => {
     let userReaction;
-    console.log(userReaction)
     if(req.headers.userid){
         try {
             userReaction = await PostReaction.findOne({
@@ -57,7 +56,7 @@ exports.getAllReactions = async (req, res, next) => {
             where: {
                 id_post: req.params.id_post
             },
-            exclude: ['id_user', 'id_post']
+            attributes: ['reaction']
         })
         .then(reactions => res.status(200).json({
             reactions,
