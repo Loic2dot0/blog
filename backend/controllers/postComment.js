@@ -14,13 +14,19 @@ exports.createComment = (req, res, next) => {
 
 // Update a comment
 exports.updateComment = async (req, res, next) => {
-    const comment = await PostComment.findOne({
-        where: {
-            id_comment: req.params.id_comment
-        }
-    });
+    let comment;
+    try {
+        comment = await PostComment.findOne({
+            where: {
+                id_comment: req.params.id_comment
+            }
+        });
+    
+        if (!comment) return res.status(404).json({ error: 'Comment not found!' });
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }
 
-    if (!comment) return res.status(404).json({ error: 'Comment not found!' });
     if(comment.id_user != req.headers.userid) return res.status(401).json({ error: 'Unauthorized!' });
     if (req.body.content) comment.content = req.body.content;
 
@@ -31,13 +37,19 @@ exports.updateComment = async (req, res, next) => {
 
 // Delete a comment
 exports.deleteComment = async (req, res, next) => {
-    const comment = await PostComment.findOne({
-        where: {
-            id_comment: req.params.id_comment
-        }
-    });
+    let comment;
+    try {
+        comment = await PostComment.findOne({
+            where: {
+                id_comment: req.params.id_comment
+            }
+        });
+    
+        if (!comment) return res.status(404).json({ error: 'Comment not found!' });
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }
 
-    if (!comment) return res.status(404).json({ error: 'Comment not found!' });
     if(comment.id_user != req.headers.userid) return res.status(401).json({ error: 'Unauthorized!' });
 
     PostComment.destroy({
@@ -84,13 +96,18 @@ exports.getOneComment = (req, res, next) => {
 
 // Delete any comment, only Admin
 exports.deleteAnyComment = async (req, res, next) => {
-    const comment = await PostComment.findOne({
-        where: {
-            id_comment: req.params.id_comment
-        }
-    });
-
-    if (!comment) return res.status(404).json({ error: 'Comment not found!' });
+    let comment;
+    try {
+        comment = await PostComment.findOne({
+            where: {
+                id_comment: req.params.id_comment
+            }
+        });
+    
+        if (!comment) return res.status(404).json({ error: 'Comment not found!' });
+    } catch (error) {
+        return res.status(500).json({error : error});
+    }
     
     PostComment.destroy({
             where: {
