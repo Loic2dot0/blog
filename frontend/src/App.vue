@@ -9,11 +9,11 @@ import { RouterLink, RouterView } from 'vue-router'
     <label for="btn-nav" class="nav__button" title="bouton de menu"><span></span></label>
 
     <nav class="nav">
-      <RouterLink to="/">Articles</RouterLink>
-      <RouterLink to="/photos">Photos</RouterLink>
-      <RouterLink to="/videos">Videos</RouterLink>
-      <RouterLink to="/about">A propos</RouterLink>
-      <RouterLink to="/login">Login</RouterLink>
+      <RouterLink to="/" class="nav__link">Articles</RouterLink>
+      <RouterLink to="/photos" class="nav__link">Photos</RouterLink>
+      <RouterLink to="/videos" class="nav__link">Videos</RouterLink>
+      <RouterLink to="/about" class="nav__link">A propos</RouterLink>
+      <RouterLink to="/login" class="nav__link">Login</RouterLink>
     </nav>
   </header>
 
