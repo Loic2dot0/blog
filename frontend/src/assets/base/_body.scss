@@ -1,0 +1,17 @@
+:root{
+    font-size: 100%;
+}
+
+*,
+::before,
+::after {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body{
+    font-family: 'Montserrat', sans-serif;
+    background-color: $color-secondary;
+    min-height: 100vh;
+}
