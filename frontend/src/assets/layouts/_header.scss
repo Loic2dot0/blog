@@ -1,0 +1,30 @@
+header{
+    width: 100%;
+    max-width: 1200px;
+    margin: auto;
+    padding: 2rem 1rem;
+    color: $textlight;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: left;
+    align-items: center;
+    position: relative;
+
+    h1{
+        font-size: 3rem;
+
+        @include desktop{
+            font-size: 6rem;
+        }
+    }
+
+    input[type="checkbox"]{
+        display: none;
+    }
+
+    @include desktop{
+        flex-direction: row;
+        justify-content: space-between;
+        padding: 2rem 0;
+    }
+}
