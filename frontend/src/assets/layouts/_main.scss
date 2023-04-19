@@ -1,0 +1,22 @@
+main{
+    flex: 1;
+    padding: 1rem;
+    width: 100%;
+    margin: auto;
+    background-color: $color-primary;
+
+    section{
+        max-width: 1200px;
+        margin: auto;
+
+        h2{
+            text-align: center;
+            font-size: 2rem;
+            margin: 1rem auto 2rem;
+
+            @include desktop{
+                font-size: 3rem;
+            }
+        }
+    }
+}
