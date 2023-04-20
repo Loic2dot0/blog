@@ -13,10 +13,16 @@
 body{
     font-family: 'Montserrat', sans-serif;
     background-color: $color-secondary;
+    color: $textdark;
 }
 
 #app{
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+input, select, textarea, button{
+    font-size: 1rem;
+    color: $textdark;
 }

@@ -11,14 +11,26 @@
     </select>
   </div>
 
-  <p v-if="isLoading">chargement des articles en cours...</p>
-  <p v-else-if="posts.count == 0">Aucun article</p>
-  <p v-else>
-    <div v-for="(post, index) in posts.rows" :key="index">
-      <h3>{{ post.title }}</h3>
-      <p>{{ post.id_post }}</p>
-    </div>
-  </p>
+  <div class="card-container">
+    <p v-if="isLoading">chargement des articles en cours...</p>
+    <p v-else-if="posts.count == 0">Aucun article</p>
+    <p v-else>
+      <div class="card" v-for="(post, index) in posts.rows" :key="index">
+        <div class="card__picture">
+          <img v-if="post.picture" :src="post.picture" alt="">
+          <img v-else src="../assets/images/default-thumbnail.jpg" alt="">
+        </div>
+        <div class="card__content">
+          <p class="card__date">{{ post.updatedAt }}</p>
+          <h3 class="card__title">{{ post.title }}</h3>
+          <p class="card__category" v-if="post.id_category == null">sans catégorie</p>
+          <p class="card__category" v-else>{{ post.Post_Category.category }}</p>
+          <div class="card__description" v-html="post.content"></div>
+          <p class="card__container-button"><button type="button" class="card__button">Voir la suite</button></p>
+        </div>
+      </div>
+    </p>
+  </div>  
 
   <div class="pagination">
     <button 
