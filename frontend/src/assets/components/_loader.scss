@@ -1,0 +1,16 @@
+.loading{
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    
+    .loader{
+        margin: 2rem;
+        width: 3rem;
+        height: 3rem;
+        border-radius: 50%;
+        border: 0.5rem solid $color-secondary;
+        border-top: 0.5rem solid darken($color-primary, 10%);
+        animation: spin 1s linear infinite;
+    }
+}

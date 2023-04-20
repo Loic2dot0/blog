@@ -1,0 +1,16 @@
+.alert{
+    text-align: center;
+    font-weight: bold;
+    margin: 2rem;
+    padding: 0.5rem;
+
+    &--success{
+        color: $success;
+        background-color: lighten($success, 55%);
+    }
+
+    &--error{
+        color: $error;
+        background-color: lighten($error, 35%);        
+    }
+}

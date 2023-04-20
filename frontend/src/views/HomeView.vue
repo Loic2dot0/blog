@@ -12,8 +12,8 @@
   </div>
 
   <div class="card-container">
-    <p v-if="isLoading">chargement des articles en cours...</p>
-    <p v-else-if="posts.count == 0">Aucun article</p>
+    <div v-if="isLoading" class="loading">chargement des articles en cours... <span class="loader"></span></div>
+    <p v-else-if="posts.rows.length == 0" class="alert">Aucun article</p>
     <p v-else>
       <div class="card" v-for="(post, index) in posts.rows" :key="index">
         <div class="card__picture">
