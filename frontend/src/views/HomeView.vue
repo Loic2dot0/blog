@@ -26,7 +26,7 @@
           <p class="card__category" v-if="post.id_category == null">sans catégorie</p>
           <p class="card__category" v-else>{{ post.Post_Category.category }}</p>
           <div class="card__description" v-html="post.content"></div>
-          <p class="card__container-button"><button type="button" class="card__button">Voir la suite</button></p>
+          <p class="card__container-button"><RouterLink :to="{name: 'post', params: {id_post: post.id_post}}" class="card__button">Voir la suite</RouterLink></p>
         </div>
       </div>
     </p>
@@ -47,6 +47,7 @@
 </template>
 
 <script>
+  import { RouterLink } from 'vue-router';
   import axios from 'axios';
 
   export default {
