@@ -7,6 +7,12 @@ const router = createRouter({
     {
       path: '/',
       name: 'home',
+      component: HomeView,
+      redirect: '/page1',
+    },
+    {
+      path: '/page:pageNumber',
+      name: 'articles',
       component: HomeView
     },
     {

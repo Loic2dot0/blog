@@ -14,7 +14,19 @@
   <p v-if="isLoading">chargement des articles en cours...</p>
   <p v-else-if="posts.count == 0">Aucun article</p>
   <p v-else>{{ posts }}</p>
-  
+
+  <div class="pagination">
+    <button 
+      type="button"
+      class="pagination__button"
+      :class="{active: currentPage == pageNumber}"
+      v-for="pageNumber in numberOfPages"
+      :key="pageNumber"
+      @click="changePageNumber(pageNumber)"
+    >
+      {{ pageNumber }}
+    </button>
+  </div>
 </template>
 
 <script>
@@ -26,15 +38,25 @@
       return {
         categories: [],
         posts: [],
+        totalPosts: 0,
         categorySelected: null,
-        page: 1,
-        isLoading: false
+        isLoading: false,
+      }
+    },
+    computed: {
+      numberOfPages(){
+        return Math.ceil(this.totalPosts / 10);
+      },
+      currentPage(){
+        return parseInt(this.$route.params.pageNumber) || 1;
       }
     },
     watch: {
       categorySelected(){
-        this.page = 1;
-        this.getPosts()
+        this.getPosts();
+      },
+      currentPage(){
+        this.getPosts();
       }
     },
     methods: {
@@ -49,9 +71,11 @@
       },
       getPosts(){
         this.isLoading = true;
-        axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.page}${this.categorySelected && this.categorySelected != 'null' ? '&category=' + this.categorySelected : ''}`)
+        const category = this.categorySelected && this.categorySelected != 'null' ? '&category=' + this.categorySelected : '';
+        axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage, category}`)
           .then(res => {
-            this.posts = res.data
+            this.posts = res.data;
+            this.totalPosts = res.data.count;
           })
           .catch(error => {
             console.log(error)
@@ -60,7 +84,9 @@
             this.isLoading = false;
           })
       },
-
+      changePageNumber(pageNumber){
+        this.$router.push({ path: `/page${pageNumber}` });        
+      }
     },
       created() {
       this.getCategories();
