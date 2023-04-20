@@ -13,7 +13,12 @@
 
   <p v-if="isLoading">chargement des articles en cours...</p>
   <p v-else-if="posts.count == 0">Aucun article</p>
-  <p v-else>{{ posts }}</p>
+  <p v-else>
+    <div v-for="(post, index) in posts.rows" :key="index">
+      <h3>{{ post.title }}</h3>
+      <p>{{ post.id_post }}</p>
+    </div>
+  </p>
 
   <div class="pagination">
     <button 
@@ -53,6 +58,7 @@
     },
     watch: {
       categorySelected(){
+        this.$router.push({ path: `/page1` });
         this.getPosts();
       },
       currentPage(){
@@ -72,7 +78,7 @@
       getPosts(){
         this.isLoading = true;
         const category = this.categorySelected && this.categorySelected != 'null' ? '&category=' + this.categorySelected : '';
-        axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage, category}`)
+        axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage}${category}`)
           .then(res => {
             this.posts = res.data;
             this.totalPosts = res.data.count;
