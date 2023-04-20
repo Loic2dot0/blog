@@ -26,23 +26,25 @@
           <p class="card__category" v-if="post.id_category == null">sans catégorie</p>
           <p class="card__category" v-else>{{ post.Post_Category.category }}</p>
           <div class="card__description" v-html="post.content"></div>
-          <p class="card__container-button"><RouterLink :to="{name: 'post', params: {id_post: post.id_post}}" class="card__button">Voir la suite</RouterLink></p>
+          <p class="card__button"><RouterLink :to="{name: 'post', params: {id_post: post.id_post}}" class="button">Voir la suite</RouterLink></p>
         </div>
       </div>
     </p>
   </div>  
 
   <div class="pagination">
+    <button type="button" class="button" @click="showPrevPages" v-if="selectedPages != 0">&lt;</button>
     <button 
       type="button"
-      class="pagination__button"
+      class="button"
       :class="{active: currentPage == pageNumber}"
-      v-for="pageNumber in numberOfPages"
+      v-for="pageNumber in pagesArray[selectedPages]"
       :key="pageNumber"
       @click="changePageNumber(pageNumber)"
     >
       {{ pageNumber }}
     </button>
+    <button type="button" class="button" @click="showNextPages" v-if="selectedPages < pagesArray.length - 1">></button>
   </div>
 </template>
 
@@ -57,17 +59,29 @@
         categories: [],
         posts: [],
         totalPosts: 0,
+        selectedPages: 0,
         categorySelected: null,
         isLoading: false,
       }
     },
     computed: {
-      numberOfPages(){
+      totalPages(){
         return Math.ceil(this.totalPosts / 10);
       },
       currentPage(){
         return parseInt(this.$route.params.pageNumber) || 1;
-      }
+      },
+      pagesArray(){
+        const pagesArray = [];
+        for (let i = 1; i <= this.totalPages; i+=5) {
+          let array = [];
+          for (let j = i; j < i + 5 && j <= this.totalPages; j++) {
+            array.push(j);
+          }
+          pagesArray.push(array);
+        }
+        return pagesArray;
+      },
     },
     watch: {
       categorySelected(){
@@ -105,6 +119,14 @@
       },
       changePageNumber(pageNumber){
         this.$router.push({ path: `/page${pageNumber}` });        
+      },
+      showPrevPages(){
+       if(this.selectedPages == 0) return;
+        this.selectedPages--;
+      },
+      showNextPages(){
+        if(this.selectedPages == this.pagesArray.length - 1) return;
+        this.selectedPages++;
       }
     },
       created() {
