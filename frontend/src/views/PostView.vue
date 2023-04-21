@@ -22,11 +22,11 @@
         </div>
         <div class="card__content">
           <p class="card__date">{{ post.updatedAt }}</p>
-          <h3 class="card__title">{{ post.title }}</h3>
+          <h3 class="card__title"><RouterLink :to="{name: 'postone', params: {id_post: post.id_post}}">{{ post.title }}</RouterLink></h3>
           <p class="card__category" v-if="post.id_category == null">sans catégorie</p>
           <p class="card__category" v-else>{{ post.Post_Category.category }}</p>
           <div class="card__description" v-html="post.content"></div>
-          <p class="card__button"><RouterLink :to="{name: 'post', params: {id_post: post.id_post}}" class="button">Voir la suite</RouterLink></p>
+          <p class="card__button"><RouterLink :to="{name: 'postone', params: {id_post: post.id_post}}" class="button">Voir la suite</RouterLink></p>
         </div>
       </div>
     </p>
@@ -85,7 +85,7 @@
     },
     watch: {
       categorySelected(){
-        this.$router.push({ path: `/page1` });
+        this.$router.push({ path: `/post/page1` });
         this.getPosts();
       },
       currentPage(){
@@ -118,7 +118,7 @@
           })
       },
       changePageNumber(pageNumber){
-        this.$router.push({ path: `/page${pageNumber}` });        
+        this.$router.push({ path: `/post/page${pageNumber}` });        
       },
       showPrevPages(){
        if(this.selectedPages == 0) return;
