@@ -41,7 +41,7 @@
         posts: [],
         totalPosts: 0,
         selectedPages: 0,
-        categorySelected: null,
+        categorySelected: 'all',
         isLoading: false,
       }
     },
@@ -76,7 +76,7 @@
     methods: {
       getPosts(){
         this.isLoading = true;
-        const category = this.categorySelected && this.categorySelected != 'null' ? '&category=' + this.categorySelected : '';
+        const category = !this.categorySelected || this.categorySelected == 'all' ? '' : '&category=' + this.categorySelected;
         axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage}${category}`)
           .then(res => {
             this.posts = res.data;
@@ -101,7 +101,7 @@
         this.selectedPages++;
       }
     },
-      created() {
+    created() {
       this.getPosts();
     }
   }

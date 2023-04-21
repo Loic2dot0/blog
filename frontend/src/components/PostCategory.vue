@@ -2,10 +2,11 @@
     <div class="category" v-if="categories.length != 0">
         <label for="category">Catégorie : </label>
         <select name="category" id="category" v-model="categorySelected">
-        <option value="null">Toutes</option>
-        <option v-for="(category, index) in categories" :key="index" :value="category.id_category">
-            {{ category.category }}
-        </option>
+            <option value="all">Toutes</option>
+            <option v-for="(category, index) in categories" :key="index" :value="category.id_category">
+                {{ category.category }}
+            </option>
+            <option value="null">sans catégorie</option>
         </select>
     </div>
 </template>
@@ -19,7 +20,7 @@
         data() {
             return {
                 categories: [],
-                categorySelected: null,
+                categorySelected: 'all',
             }
         },
         watch: {
