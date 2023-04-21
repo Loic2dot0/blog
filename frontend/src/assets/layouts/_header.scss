@@ -13,6 +13,31 @@ header{
     h1{
         font-size: 3rem;
 
+        a{
+            color: $textlight;
+            text-decoration: none;
+            position: relative;
+            
+            &::after{
+                content: '';
+                display: block;
+                width: 80%;
+                height: 0.5rem;
+                background-color: $color-primary;
+                position: absolute;
+                left: 0.5rem;
+                bottom: 0.5rem;
+                transform: scaleX(0);
+                transform-origin: left;
+                transition: transform 0.4s ease-in-out;
+            }
+
+
+            &:hover::after{
+                transform: scaleX(1);
+            }
+        }
+
         @include desktop{
             font-size: 6rem;
         }
