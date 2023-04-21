@@ -1,15 +1,7 @@
 <template>
   <h2>Articles</h2>
 
-  <div class="category" v-if="categories.length != 0">
-    <label for="category">Catégorie : </label>
-    <select name="category" id="category" v-model="categorySelected">
-      <option value="null">Toutes</option>
-      <option v-for="(category, index) in categories" :key="index" :value="category.id_category">
-        {{ category.category }}
-      </option>
-    </select>
-  </div>
+  <PostCategory @categorySelected="categorySelected = $event"></PostCategory>
 
   <div class="card-container">
     <div v-if="isLoading" class="loading">chargement des articles en cours... <span class="loader"></span></div>
@@ -36,15 +28,16 @@
 <script>
   import axios from 'axios';
   import PostCard from '../components/PostCard.vue';  
+  import PostCategory from '../components/PostCategory.vue';
 
   export default {
     name: 'PostView',
     components: {
+      PostCategory,
       PostCard,
     },
     data() {
       return {
-        categories: [],
         posts: [],
         totalPosts: 0,
         selectedPages: 0,
@@ -81,15 +74,6 @@
       }
     },
     methods: {
-      getCategories(){
-        axios.get(`${import.meta.env.VITE_URL_API}/postcategory`)
-          .then(res => {
-            this.categories = res.data
-          })
-          .catch(error => {
-            console.log(error)
-          })
-      },
       getPosts(){
         this.isLoading = true;
         const category = this.categorySelected && this.categorySelected != 'null' ? '&category=' + this.categorySelected : '';
@@ -118,7 +102,6 @@
       }
     },
       created() {
-      this.getCategories();
       this.getPosts();
     }
   }
