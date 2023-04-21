@@ -6,7 +6,7 @@
             <option v-for="(category, index) in categories" :key="index" :value="category.id_category">
                 {{ category.category }}
             </option>
-            <option value="null">sans catégorie</option>
+            <option value="null">Sans catégorie</option>
         </select>
     </div>
 </template>
