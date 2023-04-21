@@ -5,7 +5,7 @@
           <img v-else src="../assets/images/default-thumbnail.jpg" alt="">
         </div>
         <div class="card__content">
-          <p class="card__date">{{ post.updatedAt }}</p>
+          <p class="card__date">{{ formatDate(post.updatedAt) }}</p>
           <h3 class="card__title"><RouterLink :to="{name: 'postone', params: {id_post: post.id_post}}">{{ post.title }}</RouterLink></h3>
           <p class="card__category" v-if="post.id_category == null">sans catégorie</p>
           <p class="card__category" v-else>{{ post.Post_Category.category }}</p>
@@ -23,7 +23,13 @@
         props: {
             post: Object,
             required: true
-        }   
+        },
+        methods:{
+            formatDate(date){
+                const options = { year: 'numeric', month: 'long', day: 'numeric' };
+                return new Date(date).toLocaleDateString('fr-FR', options);
+            }
+        },   
     }
 </script>
 
