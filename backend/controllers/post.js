@@ -63,9 +63,12 @@ exports.deletePost = async (req, res, next) => {
 
 // Get all posts with status publish= false in first and updateAt in descending order
 exports.getPostsFull = (req, res, next) => {
-    const page = req.query.page ? req.query.page : 1;
-    const category = req.query.category ? req.query.category : null;
-    const where = category ? {id_category: category} : {};
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limitDefault = 10;
+    let limit = req.query.limit ? parseInt(req.query.limit) : limitDefault;
+    limit = limit > 25 ? 25 : limit;
+    const where = {};
+    if(req.query.category) where.id_category = req.query.category == 'null' ? null : req.query.category;
 
     Post.findAndCountAll({
             where,
@@ -79,10 +82,11 @@ exports.getPostsFull = (req, res, next) => {
             }],
             order: [['publish', 'ASC'],
                     ['updatedAt', 'DESC']],
-            limit: 10,
+            limit,
             offset: (page - 1) * 10,
         })
         .then(posts => {
+            posts.postsByPage = limit;
             res.status(200).json(posts);
         })
         .catch(error => res.status(500).json({error: error}));
@@ -112,9 +116,14 @@ exports.getOnePostFull = (req, res, next) => {
 
 // Get all posts with status publish=true only, updateAt in descending order
 exports.getPosts = (req, res, next) => {
-    const page = req.query.page ? req.query.page : 1;
-    const category = req.query.category ? req.query.category : null;
-    const where = category ? {publish: true, id_category: category} : {publish: true};
+    const page = req.query.page ? parseInt(req.query.page) : 1;
+    const limitDefault = 10;
+    let limit = req.query.limit ? parseInt(req.query.limit) : limitDefault;
+    limit = limit > 25 ? 25 : limit;
+    const where = {
+        publish: true
+    };
+    if(req.query.category) where.id_category = req.query.category == 'null' ? null : req.query.category;
     
     Post.findAndCountAll({
             where,
@@ -127,10 +136,11 @@ exports.getPosts = (req, res, next) => {
                 attributes: ['name']
             }],
             order: [['updatedAt', 'DESC']],
-            limit: 10,
-            offset: (page - 1) * 10,
+            limit,
+            offset: (page - 1) * limit,
         })
         .then(posts => {
+            posts.postsByPage = limit;
             res.status(200).json(posts);
         })
         .catch(error => res.status(500).json({error: error}));
