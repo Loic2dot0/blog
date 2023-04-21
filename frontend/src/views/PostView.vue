@@ -5,8 +5,8 @@
 
   <div class="card-container">
     <div v-if="isLoading" class="loading">chargement des articles en cours... <span class="loader"></span></div>
-    <p v-else-if="posts.rows.length == 0" class="alert">Aucun article</p>
-    <PostCard v-else v-for="(post, index) in posts.rows" :key="index" :post="post"></PostCard>
+    <p v-else-if="posts.length == 0" class="alert">Aucun article</p>
+    <PostCard v-else v-for="(post, index) in posts" :key="index" :post="post"></PostCard>
   </div>
   
   <Pagination :totalElements="totalPosts" :currentPage="currentPage" @changePageNumber="changePageNumber"></Pagination>
@@ -54,7 +54,7 @@
         const category = !this.categorySelected || this.categorySelected == 'all' ? '' : '&category=' + this.categorySelected;
         axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage}${category}`)
           .then(res => {
-            this.posts = res.data;
+            this.posts = res.data.rows;
             this.totalPosts = res.data.count;
           })
           .catch(error => {
