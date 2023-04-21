@@ -1,5 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
+import PostView from '../views/PostView.vue'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -8,15 +9,21 @@ const router = createRouter({
       path: '/',
       name: 'home',
       component: HomeView,
-      redirect: '/page1',
     },
     {
-      path: '/page:pageNumber',
-      component: HomeView
+      path: '/post',
+      name: 'post',
+      component: PostView,
+      redirect: '/post/page1',
+    },
+    {
+      path: '/post/page:pageNumber',
+      name: 'postpage',
+      component: PostView
     },{
       path: '/post/:id_post',
-      name: 'post',
-      component: () => import('../views/PostView.vue'),
+      name: 'postone',
+      component: () => import('../views/PostOneView.vue'),
     },
     {
       path: '/photos',
