@@ -1,6 +1,6 @@
 <template>
     <h2>Les derniers articles</h2>
-    <div v-if="isLoading" class="loading">
+    <div v-if="isLoadingPosts" class="loading">
         Chargement des articles en cours...
         <span class="loading__spinner"></span>
     </div>
