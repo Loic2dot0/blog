@@ -1,5 +1,5 @@
 <template>
-    <div class="card">
+    <article class="card">
         <div class="card__picture">
           <img v-if="post.picture" :src="post.picture" alt="">
           <img v-else src="../assets/images/default-thumbnail.jpg" alt="">
@@ -12,7 +12,7 @@
           <div class="card__description" v-html="post.content"></div>
           <p class="card__button"><RouterLink :to="{name: 'postone', params: {id_post: post.id_post}}" class="button">Voir la suite</RouterLink></p>
         </div>
-    </div>
+    </article>
 </template>
 
 <script>

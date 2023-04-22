@@ -3,6 +3,7 @@
     font-weight: bold;
     margin: 2rem;
     padding: 0.5rem;
+    border-radius: 0.5rem;
 
     &--success{
         color: $success;
@@ -11,6 +12,6 @@
 
     &--error{
         color: $error;
-        background-color: lighten($error, 35%);        
-    }
+        background-color: lighten($error, 35%);
+    }    
 }

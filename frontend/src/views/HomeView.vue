@@ -1,7 +1,13 @@
 <template>
     <h2>Les derniers articles</h2>
-
-    <div class="recent-container">
+    <div v-if="isLoading" class="loading">
+        Chargement des articles en cours...
+        <span class="loading__spinner"></span>
+    </div>
+    <div v-else-if="errorPosts">
+        <p class="alert alert--error">Oups... Une erreur est survenue</p>
+    </div>
+    <div v-else class="recent-container">
         <PostCard v-for="(post, index) in posts" :key="index" :post="post"></PostCard>
         <div class="recent-container__link">
             <RouterLink to="/post" class="button">Voir tous les articles</RouterLink>
@@ -42,21 +48,24 @@ export default {
     data() {
         return {
             posts: [],
-            isLoading: false,
+            isLoadingPosts: false,
+            errorPosts: null,
         }
     },
     methods: {
       getPosts(){
-        this.isLoading = true;
+        this.errorPosts = null;
+        this.isLoadingPosts = true;
         axios.get(`${import.meta.env.VITE_URL_API}/post?limit=3`)
           .then(res => {
             this.posts = res.data.rows;
           })
           .catch(error => {
-            console.log(error)
+            this.errorPosts = error;
+            console.error(error);
           })
           .finally(() => {
-            this.isLoading = false;
+            this.isLoadingPosts = false;
           })
       },
     },

@@ -4,7 +4,8 @@
   <PostCategory @categorySelected="categorySelected = $event"></PostCategory>
 
   <div class="card-container">
-    <div v-if="isLoading" class="loading">chargement des articles en cours... <span class="loader"></span></div>
+    <div v-if="isLoading" class="loading">chargement des articles en cours... <span class="loading__spinner"></span></div>
+    <p v-else-if="error" class="alert alert--error">Oups... Une erreur est survenue</p>
     <p v-else-if="posts.length == 0" class="alert">Aucun article</p>
     <PostCard v-else v-for="(post, index) in posts" :key="index" :post="post"></PostCard>
   </div>
@@ -32,6 +33,7 @@
         totalPosts: 0,
         categorySelected: 'all',
         isLoading: false,
+        error: null,
       }
     },
     computed: {
@@ -50,6 +52,7 @@
     },
     methods: {
       getPosts(){
+        this.error = null;
         this.isLoading = true;
         const category = !this.categorySelected || this.categorySelected == 'all' ? '' : '&category=' + this.categorySelected;
         axios.get(`${import.meta.env.VITE_URL_API}/post?page=${this.currentPage}${category}`)
@@ -58,7 +61,8 @@
             this.totalPosts = res.data.count;
           })
           .catch(error => {
-            console.log(error)
+            this.error = error;
+            console.error(error)
           })
           .finally(() => {
             this.isLoading = false;

@@ -1,5 +1,5 @@
 <template>
-    <div class="category" v-if="categories.length != 0">
+    <div class="category" v-if="categories.length != 0 && !error">
         <label for="category">Catégorie : </label>
         <select name="category" id="category" v-model="categorySelected">
             <option value="all">Toutes</option>
@@ -21,6 +21,7 @@
             return {
                 categories: [],
                 categorySelected: 'all',
+                error: null,
             }
         },
         watch: {
@@ -30,12 +31,14 @@
         },
         methods:{
             getCategories(){
+                this.error = null;
                 axios.get(`${import.meta.env.VITE_URL_API}/postcategory`)
                 .then(res => {
                     this.categories = res.data
                 })
                 .catch(error => {
-                    console.log(error)
+                    this.error = error;
+                    console.error(error)
                 })
             },
         },
