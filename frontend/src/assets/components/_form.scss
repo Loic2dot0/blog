@@ -1,0 +1,70 @@
+.form{
+    margin: auto;
+    padding: 1rem;
+    border-radius: 0.5rem;
+    box-shadow: 0px 0px 10px rgba(0,0,0,0.2);
+
+    @include tablet{
+        width: 50%;
+    }
+
+    .input-container{
+        position: relative;
+        margin-bottom: 1rem;
+
+        input{
+            width: 100%;
+            padding: 1rem;
+            padding-right: 3rem;
+            border: solid 1px lighten($textdark, 70%);
+            border-radius: 0.2rem
+        }
+
+        span{
+            display: flex;
+            align-items: center;
+            height: 100%;
+            position: absolute;
+            right:0;
+            top: 0;
+            padding: 1rem;
+
+            svg{
+                width: 1rem;
+                height: 1rem;
+                fill: lighten($textdark, 30%)
+            }
+        }
+    }
+
+    &__submit{
+        width: 100%;
+        background-color: $color-secondary;
+        color: $textlight;
+        font-size: 1.2rem;
+        text-transform: uppercase;
+        border: none;
+        transition: all 0.4s ease-in-out;
+        
+        &:hover{
+            border: none;
+            background-color: $color-primary;
+            color: $color-secondary;
+            outline: solid 1px $color-secondary;
+        }
+    }
+
+    &__link{
+        margin-top: 1rem;
+        text-align: center;
+
+        a{
+            color: $color-secondary;
+            font-weight: 600;
+        }
+    }
+
+    .toogle-password{
+        cursor: pointer;
+    }
+}
