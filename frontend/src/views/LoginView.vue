@@ -79,8 +79,8 @@
                         password: this.password
                     })
                     .then(res => {
-                        console.log(res.data);
-                       
+                        localStorage.setItem('user', JSON.stringify(res.data));
+                        this.$router.back();                       
                     }).catch(err => {
                         this.errorMessage = err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.';
                     })
