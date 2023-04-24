@@ -3,7 +3,7 @@
         <h2 class="form__title">Connectez-vous</h2>
 
         <div class="input-container">
-            <input placeholder="Entrer votre email" type="email">
+            <input placeholder="Entrer votre email" type="email" v-model="email" :class="{error: errorEmail}">
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
                     <path d="M256 64C150 64 64 150 64 256s86 192 192 192c17.7 0 32 14.3 32 32s-14.3 32-32 32C114.6 512 0 397.4 0 256S114.6 0 256 0S512 114.6 512 256v32c0 53-43 96-96 96c-29.3 0-55.6-13.2-73.2-33.9C320 371.1 289.5 384 256 384c-70.7 0-128-57.3-128-128s57.3-128 128-128c27.9 0 53.7 8.9 74.7 24.1c5.7-5 13.1-8.1 21.3-8.1c17.7 0 32 14.3 32 32v80 32c0 17.7 14.3 32 32 32s32-14.3 32-32V256c0-106-86-192-192-192zm64 192a64 64 0 1 0 -128 0 64 64 0 1 0 128 0z"/>
@@ -11,7 +11,7 @@
             </span>
         </div>
         <div class="input-container">
-            <input placeholder="Entrer votre mot de passe" :type="changePasswordType">
+            <input placeholder="Entrer votre mot de passe" :type="changePasswordType" v-model="password" :class="{error: errorPassword}">
             <span @click="passwordHidden = !passwordHidden" class="toogle-password">
                 <svg v-if="passwordHidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
                     <path d="M288 80c-65.2 0-118.8 29.6-159.9 67.7C89.6 183.5 63 226 49.4 256c13.6 30 40.2 72.5 78.6 108.3C169.2 402.4 222.8 432 288 432s118.8-29.6 159.9-67.7C486.4 328.5 513 286 526.6 256c-13.6-30-40.2-72.5-78.6-108.3C406.8 109.6 353.2 80 288 80zM95.4 112.6C142.5 68.8 207.2 32 288 32s145.5 36.8 192.6 80.6c46.8 43.5 78.1 95.4 93 131.1c3.3 7.9 3.3 16.7 0 24.6c-14.9 35.7-46.2 87.7-93 131.1C433.5 443.2 368.8 480 288 480s-145.5-36.8-192.6-80.6C48.6 356 17.3 304 2.5 268.3c-3.3-7.9-3.3-16.7 0-24.6C17.3 208 48.6 156 95.4 112.6zM288 336c44.2 0 80-35.8 80-80s-35.8-80-80-80c-.7 0-1.3 0-2 0c1.3 5.1 2 10.5 2 16c0 35.3-28.7 64-64 64c-5.5 0-10.9-.7-16-2c0 .7 0 1.3 0 2c0 44.2 35.8 80 80 80zm0-208a128 128 0 1 1 0 256 128 128 0 1 1 0-256z"/>
@@ -21,23 +21,28 @@
                 </svg>
             </span>
         </div>
+        <div class="alert alert--error" v-if="errorMessage">{{ errorMessage }}</div>
         
-        <button class="button form__submit" type="submit">Se connecter</button>
+        <button class="button form__submit" type="submit" @click="handleForm">Se connecter</button>
 
         <p class="form__link">Pas de compte ? <RouterLink to="/signup">Inscrivez-vous</RouterLink></p>
     </form>
 </template>
 
 <script>
+    import axios from 'axios';
+
     export default {
         name: 'LoginView',
         data() {
             return {
-                passwordHidden: true
+                email: '',
+                password: '',
+                passwordHidden: true,
+                errorMessage: null,
+                errorEmail: false,
+                errorPassword: false
             }
-        },
-        methods: {
-            
         },
         computed: {
             changePasswordType(){
@@ -45,7 +50,41 @@
             }
         },
         watch: {
-            
+            email(){
+                this.errorEmail = false;
+                if(!this.errorPassword) this.errorMessage = null;
+            },
+            password(){
+                this.errorPassword = false;
+                if(!this.errorMail) this.errorMessage = null;
+            }
+        },
+        methods: {
+            handleForm(e){
+                e.preventDefault();
+                this.errorMessage = null;
+                this.errorEmail = false;
+                this.errorPassword = false;
+
+                if(!this.email || this.email == '') this.errorEmail = true;
+                if(!this.password || this.password == '') this.errorPassword = true;
+
+                if(this.errorEmail || this.errorPassword) {
+                    this.errorMessage = 'Vous devez remplir les champs.'
+                    return;
+                }
+
+                axios.post(`${import.meta.env.VITE_URL_API}/user/login`, {
+                        email: this.email,
+                        password: this.password
+                    })
+                    .then(res => {
+                        console.log(res.data);
+                       
+                    }).catch(err => {
+                        this.errorMessage = err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.';
+                    })
+            }  
         },
         created() {
 
