@@ -22,6 +22,7 @@
             </span>
         </div>
         <div class="alert alert--error" v-if="errorMessage">{{ errorMessage }}</div>
+        <div class="alert alert--success" v-if="success">Connexion réussie</div>
         
         <button class="button form__submit" type="submit" @click="handleForm">Se connecter</button>
 
@@ -41,7 +42,8 @@
                 passwordHidden: true,
                 errorMessage: null,
                 errorEmail: false,
-                errorPassword: false
+                errorPassword: false,
+                success: false
             }
         },
         computed: {
@@ -79,8 +81,11 @@
                         password: this.password
                     })
                     .then(res => {
+                        this.success = true;
                         localStorage.setItem('user', JSON.stringify(res.data));
-                        this.$router.back();                       
+                        setTimeout(() => {
+                            this.$router.push('/profile');                       
+                        }, 1000);                        
                     }).catch(err => {
                         this.errorMessage = err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.';
                     })
