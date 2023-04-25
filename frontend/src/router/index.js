@@ -52,8 +52,26 @@ const router = createRouter({
       path: '/signup',
       name: 'signup',
       component: () => import('../views/SignupView.vue')
+    },
+    {
+      path: '/profile',
+      name: 'profile',
+      meta: { requiresAuth: true },
+      component: () => import('../views/ProfileView.vue')
     }
   ]
 })
+
+router.beforeEach((to, from, next) => {
+  const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).userId : null;
+  const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
+  
+  if(to.matched.some(record => record.meta.requiresAuth) && (!userId || !token)) {
+    next({ name: 'login' });
+  } else {
+    next();
+  }
+});
+
 
 export default router
