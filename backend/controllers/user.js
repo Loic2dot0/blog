@@ -37,7 +37,7 @@ exports.login = async (req, res, next) => {
             }
         });
         
-        if (!user) return res.status(404).json({error: 'User not found!'});
+        if (!user) return res.status(401).json({error: 'User not found!'});
     } catch (error) {
         return res.status(500).json({error: error});
     }
