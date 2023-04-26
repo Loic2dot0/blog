@@ -32,6 +32,8 @@
 
 <script>
     import axios from 'axios';
+    import { useUserStore } from '../stores/user';
+    import { mapActions } from 'pinia';
 
     export default {
         name: 'LoginView',
@@ -62,6 +64,7 @@
             }
         },
         methods: {
+            ...mapActions(useUserStore, ['saveUserSession']),
             handleForm(e){
                 e.preventDefault();
                 this.errorMessage = null;
@@ -82,7 +85,7 @@
                     })
                     .then(res => {
                         this.success = true;
-                        localStorage.setItem('user', JSON.stringify(res.data));
+                        this.saveUserSession(res.data);
                         setTimeout(() => {
                             this.$router.push('/profile');                       
                         }, 1000);                        
@@ -90,9 +93,6 @@
                         this.errorMessage = err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.';
                     })
             }  
-        },
-        created() {
-
         }
     }
 </script>
