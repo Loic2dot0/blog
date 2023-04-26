@@ -25,7 +25,7 @@ export const useUserStore = defineStore('user', {
                     headers
                 })
                 .then(res => {
-                    if(res.data.name && res.data.avatar){
+                    if(res.data){
                         this.name = res.data.name;
                         this.avatar = res.data.avatar;
                     }
