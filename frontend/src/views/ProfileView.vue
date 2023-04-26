@@ -44,11 +44,12 @@
 
         <p>Attention, cette action est irréversible.</p>
         
-        <button class="button button--danger">Supprimer mon compte</button>
+        <button class="button button--danger" @click="modalConfirm = true">Supprimer mon compte</button>
       </div>
     </div>
-</div>
+  </div>
   
+  <ModalConfirm v-if="modalConfirm" title="Supprimer mon compte ?" @confirm="deleteAccount" @cancel="modalConfirm = false" />
 </template>
 
 <script>
@@ -56,9 +57,13 @@
   import { useUserStore} from '../stores/user';
   import { mapState } from 'pinia';
   import { mapActions } from 'pinia';
+  import ModalConfirm from '../components/ModalConfirm.vue';
 
   export default {
     name: 'ProfileView',
+    components: {
+      ModalConfirm
+    },
     data() {
       return {
         userName: null,
@@ -66,7 +71,8 @@
         errorName: false,
         errorMessage: null,
         errorGlobal: false,
-        success: false
+        success: false,
+        modalConfirm: false,
       }
     },
     computed: {
@@ -124,6 +130,10 @@
             console.log(err);
             this.errorGlobal = true;
           })
+      },
+      deleteAccount(){
+        this.modalConfirm = false;
+
       }
     }
   }
