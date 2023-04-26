@@ -16,4 +16,14 @@
         border: solid 1px $textdark;
         font-weight: bold;
     }
+
+    &--danger{
+        background-color: lighten($error, 35%);
+        color: $error;
+        border: solid 1px lighten($error, 35%);
+
+        &:hover{
+            border: solid 1px $error;
+        }
+    }
 }
