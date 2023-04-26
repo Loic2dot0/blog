@@ -26,4 +26,14 @@
             border: solid 1px $error;
         }
     }
+
+    &--success{
+        background-color: lighten($success, 55%);
+        color: $success;
+        border: solid 1px lighten($success, 55%);
+
+        &:hover{
+            border: solid 1px $success;
+        }
+    }
 }
