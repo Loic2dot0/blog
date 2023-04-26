@@ -1,10 +1,13 @@
 <template>
   <h2>Mon Profil</h2>
 
-  <button @click="logout">Logout</button>
+  <button @click="logout" class="button">Me déconnecter</button>
 </template>
 
 <script>
+  import { useUserStore} from '../stores/user';
+  import { mapActions } from 'pinia';
+
   export default {
     name: 'ProfileView',
     data() {
@@ -13,10 +16,7 @@
       }
     },
     methods: {
-      logout() {
-        localStorage.clear();
-        this.$router.push('/login');
-      }
+      ...mapActions(useUserStore, ['logout']),
     }
   }
 </script>
