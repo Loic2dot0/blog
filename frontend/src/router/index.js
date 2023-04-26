@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import HomeView from '../views/HomeView.vue'
 import PostView from '../views/PostView.vue'
+import { useUserStore } from '../stores/user'
 
 const router = createRouter({
   history: createWebHistory(import.meta.env.BASE_URL),
@@ -38,9 +39,6 @@ const router = createRouter({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (About.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue')
     },
     {
@@ -63,8 +61,9 @@ const router = createRouter({
 })
 
 router.beforeEach((to, from, next) => {
-  const userId = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).userId : null;
-  const token = localStorage.getItem('user') ? JSON.parse(localStorage.getItem('user')).token : null;
+  const userStore = useUserStore();
+  const userId = userStore.userId;
+  const token = userStore.token;
   
   if(to.meta.requiresAuth && (!userId || !token)) {
     next({ name: 'login' });
