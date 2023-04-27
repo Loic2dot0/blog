@@ -133,7 +133,23 @@
       },
       deleteAccount(){
         this.modalConfirm = false;
+        this.errorGlobal = false;
 
+        axios.delete(`${import.meta.env.VITE_URL_API}/user`, {
+            headers: {
+              "userid" : this.userId,
+              "Authorization" : `Bearer ${this.token}`,
+            }
+          }).then(res => {
+            if(res.status == 200){
+              this.logout();
+            } else {
+              this.errorGlobal = true;
+            }
+          }).catch(err => {
+            console.log(err);
+            this.errorGlobal = true;
+          })
       }
     }
   }
