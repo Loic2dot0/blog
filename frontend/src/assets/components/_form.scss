@@ -21,6 +21,12 @@
 
             &.error{
                 border: solid 1px $error;
+                background-color: lighten($error, 35%);
+            }
+
+            &.success{
+                border: solid 1px $success;
+                background-color: lighten($success, 55%);
             }
         }
 
