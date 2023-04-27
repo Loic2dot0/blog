@@ -10,6 +10,7 @@
                 v-model="email"
                 :class="{error: errorEmail, success: validEmail}"
                 @blur="checkEmail"
+                @focus="errorEmail = null"
             >
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
@@ -28,7 +29,7 @@
                 v-model="name"
                 :class="{error: errorName, success: validName}"
                 @blur="checkName"
-                @focus="infoName = true"
+                @focus="()=>{infoName = true; errorName = null}"
             >
             <span>
                 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 448 512">
@@ -47,7 +48,7 @@
                 v-model="password"
                 :class="{error: errorPassword, success: validPassword}"
                 @blur="checkPassword"
-                @focus="infoPassword = true"
+                @focus="()=>{infoPassword = true; errorPassword = null}"
             >
             <span @click="passwordHidden = !passwordHidden" class="toogle-password">
                 <svg v-if="passwordHidden" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -68,6 +69,7 @@
                 v-model="passwordConfirm"
                 :class="{error: errorPasswordConfirm, success: validPasswordConfirm}"
                 @blur="checkPasswordConfirm"
+                @focus="errorPasswordConfirm = null"
             >
             <span @click="passwordHiddenConfirm = !passwordHiddenConfirm" class="toogle-password">
                 <svg v-if="passwordHiddenConfirm" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 576 512">
@@ -125,19 +127,96 @@
         },
         methods: {
             checkEmail(){
+                this.errorEmail = null;
+                this.validEmail = false;
+    
+                if(this.email == ''){
+                    this.errorEmail = 'Ne peut pas être vide';
+                    return;
+                }
+
+                const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
+                this.errorEmail = mailRegex.test(this.email) ? null : 'Adresse mail invalide';
+                if(this.errorEmail != null) return;
                 
+                this.validEmail = true;                
             },
             checkName(){
                 this.infoName = false;
+                this.errorName = null;
+                this.validName = false;
 
+                if(this.name == ''){
+                    this.errorName = 'Ne peut pas être vide';
+                    return;
+                }
+
+                if(this.name.length < 3){
+                    this.errorName = 'Doit contenir au moins 3 caractères';
+                    return;
+                }
+
+                if(this.name.length > 25){
+                    this.errorName = 'Ne dépasser plus de 25 caractères';
+                    return;
+                }
+
+                this.validName = true;
             },
             checkPassword(){
                 this.infoPassword = false;
+                this.errorPassword = null;
+                this.validPassword = false;
+
+                if(this.password == ''){
+                    this.errorPassword = 'Ne peut pas être vide';
+                    return;
+                }
+                
+                const passwordCondition = [];
+                passwordCondition.push(new RegExp("[a-z]").test(this.password));
+                passwordCondition.push(new RegExp("[A-Z]").test(this.password));
+                passwordCondition.push(new RegExp("[0-9]").test(this.password));
+                passwordCondition.push(new RegExp("[^a-zA-Z0-9]").test(this.password));
+                passwordCondition.push(this.password.length >= 8 ? true : false);
+
+                const failedCondition = passwordCondition.filter(condition => !condition);
+                
+                if(failedCondition.length > 0){
+                    const require = [];
+                    if(!passwordCondition[0]) require.push('minuscule');
+                    if(!passwordCondition[1]) require.push('majuscule');
+                    if(!passwordCondition[2]) require.push('chiffre');
+                    if(!passwordCondition[3]) require.push('symbole');
+                    if(!passwordCondition[4]) require.push('8 caractères minimum');
+
+                    this.errorPassword = 'Manque : ';
+
+                    for(let i = 0; i < require.length; i++){
+                        this.errorPassword += require[i];
+                        this.errorPassword += i != require.length - 1 ? ', ' : '.';
+                    }
+                } else {
+                    this.validPassword = true;
+                }
             },
             checkPasswordConfirm(){
+                this.errorPasswordConfirm = null;
+                this.validPasswordConfirm = false;
 
+                if(this.passwordConfirm == ''){
+                    this.errorPasswordConfirm = 'Ne peut pas être vide';
+                    return;
+                }
+
+                if(this.passwordConfirm != this.password){
+                    this.errorPasswordConfirm = 'Les mots de passe ne correspondent pas';
+                    return;
+                }
+                this.validPasswordConfirm = true;
             },
             handleForm(){
+                e.preventDefault();
 
             }
         }
