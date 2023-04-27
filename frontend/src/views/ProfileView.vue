@@ -105,6 +105,12 @@
           return;
         }
 
+        if(this.userName.length > 25){
+          this.errorName = true;
+          this.errorMessage = 'Le nom est limité à 25 caractères';
+          return;
+        }
+
         const formData = new FormData();
         formData.append('name', this.userName);
         formData.append('avatar', this.file);
