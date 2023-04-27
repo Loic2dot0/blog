@@ -33,13 +33,12 @@
             getCategories(){
                 this.error = null;
                 axios.get(`${import.meta.env.VITE_URL_API}/postcategory`)
-                .then(res => {
-                    this.categories = res.data
-                })
-                .catch(error => {
-                    this.error = error;
-                    console.error(error)
-                })
+                    .then(res => {
+                        this.categories = res.data
+                    })
+                    .catch(error => {
+                        this.error = error;
+                    })
             },
         },
         created() {

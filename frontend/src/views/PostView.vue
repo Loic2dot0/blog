@@ -62,7 +62,6 @@
           })
           .catch(error => {
             this.error = error;
-            console.error(error)
           })
           .finally(() => {
             this.isLoading = false;

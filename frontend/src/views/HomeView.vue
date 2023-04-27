@@ -62,7 +62,6 @@ export default {
           })
           .catch(error => {
             this.errorPosts = error;
-            console.error(error);
           })
           .finally(() => {
             this.isLoadingPosts = false;

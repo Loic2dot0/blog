@@ -119,15 +119,10 @@
             headers
           })
           .then(res => {
-            if(res.status == 200){
-              this.success = true;
-              this.getUser();
-            } else {
-              this.errorGlobal = true;
-            }
+            this.success = true;
+            this.getUser();
           })
           .catch(err => {
-            console.log(err);
             this.errorGlobal = true;
           })
       },
@@ -141,13 +136,9 @@
               "Authorization" : `Bearer ${this.token}`,
             }
           }).then(res => {
-            if(res.status == 200){
-              this.logout();
-            } else {
-              this.errorGlobal = true;
-            }
+            this.logout();
+            this.errorGlobal = true;
           }).catch(err => {
-            console.log(err);
             this.errorGlobal = true;
           })
       }
