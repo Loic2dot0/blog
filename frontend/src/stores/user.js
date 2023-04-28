@@ -34,10 +34,23 @@ export const useUserStore = defineStore('user', {
                     console.log(error);
                 });
         },    
-        saveUserSession(user) {
-            this.userId = user.userId;
-            this.token = user.token;
-            localStorage.setItem('user', JSON.stringify({userId: this.userId, token: this.token}));
+        async login({email, password}){
+            try{
+                const res = await axios.post(`${import.meta.env.VITE_URL_API}/user/login`, {
+                    email,
+                    password
+                });
+                
+                if(!res.data.userId || !res.data.token) throw new Error('Une erreur est survenue.');
+                
+                this.userId = res.data.userId;
+                this.token = res.data.token;
+                localStorage.setItem('user', JSON.stringify({userId: this.userId, token: this.token}));
+                return { message : 'logged'};
+                
+            } catch(err){
+                return { error: err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.'};
+            }
         },
         logout() {
             this.userId = null;
