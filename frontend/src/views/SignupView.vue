@@ -83,7 +83,7 @@
         <div v-if="errorPasswordConfirm" class="alert alert--error">
             <p>{{ errorPasswordConfirm }}</p>
         </div>
-        <div class="alert alert--error" v-if="errorGlobal">{{ errorGlobal }}</div>
+        <div class="alert alert--error" v-if="errorGlobal">Votre compte n'a pu être créé</div>
         <div class="alert alert--success" v-if="success">Compte créé</div>
         
         <button class="button form__submit" type="submit" @click="handleForm">S'inscrire</button>
@@ -93,6 +93,10 @@
 </template>
 
 <script>
+import axios from 'axios';
+import { useUserStore } from '../stores/user';
+import { mapActions } from 'pinia';
+
     export default {
         name: 'SignupView',
         data() {
@@ -101,7 +105,7 @@
                 name: '',
                 password: '',
                 passwordConfirm: '',
-                errorGlobal: null,
+                errorGlobal: false,
                 errorEmail: null,
                 errorName: null,
                 errorPassword: null,
@@ -126,6 +130,7 @@
             }
         },
         methods: {
+            ...mapActions(useUserStore, ['login']),
             checkEmail(){
                 this.errorEmail = null;
                 this.validEmail = false;
@@ -172,7 +177,7 @@
                     this.errorPassword = 'Ne peut pas être vide';
                     return;
                 }
-                
+
                 const passwordCondition = [];
                 passwordCondition.push(new RegExp("[a-z]").test(this.password));
                 passwordCondition.push(new RegExp("[A-Z]").test(this.password));
@@ -215,9 +220,45 @@
                 }
                 this.validPasswordConfirm = true;
             },
-            handleForm(){
+            handleForm(e){
                 e.preventDefault();
+                this.errorGlobal = false;
+                this.success = false;
 
+                this.checkEmail();
+                this.checkName();
+                this.checkPassword();
+                this.checkPasswordConfirm();
+
+                if(this.validEmail && this.validName && this.validPassword && this.validPasswordConfirm){
+                    this.createAccount({ email: this.email, name: this.name, password: this.password});
+                }
+            },
+            async createAccount({ email, name, password}){
+                try {
+                    const res = await axios.post(`${import.meta.env.VITE_URL_API}/user/signup`, {
+                        email,
+                        name,
+                        password
+                    });
+                    
+                    if(res && res.status == 201)
+                    {
+                        // login du nouvel utilisateur créé et redirection vers la page profile
+                        const loginRes =  await this.login({email, password});
+                        if(loginRes.message){
+                            this.success = true;
+                            setTimeout(() => {
+                                this.$router.push('/profile');                       
+                            }, 1000);
+                        } else this.errorMessage = loginRes.error;
+                    } else {
+                        this.errorGlobal = true;
+                    }                  
+    
+                } catch (error) {
+                    this.errorGlobal = true;                    
+                }   
             }
         }
     }
