@@ -31,7 +31,6 @@
 </template>
 
 <script>
-    import axios from 'axios';
     import { useUserStore } from '../stores/user';
     import { mapActions } from 'pinia';
 
@@ -64,8 +63,8 @@
             }
         },
         methods: {
-            ...mapActions(useUserStore, ['saveUserSession']),
-            handleForm(e){
+            ...mapActions(useUserStore, ['login']),
+            async handleForm(e){
                 e.preventDefault();
                 this.errorMessage = null;
                 this.errorEmail = false;
@@ -79,19 +78,13 @@
                     return;
                 }
 
-                axios.post(`${import.meta.env.VITE_URL_API}/user/login`, {
-                        email: this.email,
-                        password: this.password
-                    })
-                    .then(res => {
-                        this.success = true;
-                        this.saveUserSession(res.data);
-                        setTimeout(() => {
-                            this.$router.push('/profile');                       
-                        }, 1000);                        
-                    }).catch(err => {
-                        this.errorMessage = err.response.status == 401 ? 'Identifiant ou mot de passe incorrect' : 'Une erreur est survenue.';
-                    })
+                const res = await this.login({email: this.email, password: this.password});
+                if(res.message){
+                    this.success = true;
+                    setTimeout(() => {
+                        this.$router.push('/profile');                       
+                    }, 1000); 
+                } else this.errorMessage = res.error;
             }  
         }
     }
