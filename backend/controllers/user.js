@@ -3,7 +3,6 @@ const jwt = require('jsonwebtoken');
 const CryptoJS = require('crypto-js');
 const fs = require('fs');
 const User = require('../models/User');
-const Admin = require('../models/Admin');
 
 // signup a new user
 exports.signup = (req, res, next) => {
@@ -42,28 +41,13 @@ exports.login = async (req, res, next) => {
         return res.status(500).json({error: error});
     }
 
-    let isAdmin;
-    try {
-        isAdmin = await Admin.findOne({
-            where: {
-                id_user: user.id_user
-            }
-        });
-    } catch (error) {
-        return res.status(500).json({error: error});
-    }
-
     bcrypt.compare(req.body.password, user.password)
         .then(valid =>{
             if(!valid) return res.status(401).json({error: 'Incorrect password!'});
             
             res.status(200).json({
                 userId: user.id_user,
-                token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: process.env.JWT_EXPIRATION }),
-                name: user.name,
-                avatar: user.avatar,
-                isAdmin: isAdmin ? true : false
-                
+                token: jwt.sign({ userId: user.id_user }, process.env.JWT_KEY, { expiresIn: process.env.JWT_EXPIRATION })                
             });
         })
         .catch(error => res.status(500).json({error}));
