@@ -131,7 +131,7 @@ import { mapActions } from 'pinia';
         },
         methods: {
             ...mapActions(useUserStore, ['login']),
-            checkEmail(){
+            async checkEmail(){
                 this.errorEmail = null;
                 this.validEmail = false;
     
@@ -143,10 +143,13 @@ import { mapActions } from 'pinia';
                 const mailRegex = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,})+$/;
                 this.errorEmail = mailRegex.test(this.email) ? null : 'Adresse mail invalide';
                 if(this.errorEmail != null) return;
-                
-                this.validEmail = true;                
+
+                const searchEmail = await this.searchIsAvailable('email', this.email);
+                if(searchEmail.isEmail != null && searchEmail.isEmail == false){
+                    this.validEmail = true;
+                } else this.errorEmail = searchEmail.isEmail != null && searchEmail.isEmail == true ? 'Ce mail est déjà utilisé' : 'Une erreur est survenue';          
             },
-            checkName(){
+            async checkName(){
                 this.infoName = false;
                 this.errorName = null;
                 this.validName = false;
@@ -166,7 +169,10 @@ import { mapActions } from 'pinia';
                     return;
                 }
 
-                this.validName = true;
+                const searchName = await this.searchIsAvailable('name', this.name);
+                if(searchName.isName != null && searchName.isName == false){
+                    this.validName = true;
+                } else this.errorName = searchName.isName != null && searchName.isName == true ? 'Ce nom est déjà utilisé' : 'Une erreur est survenue';
             },
             checkPassword(){
                 this.infoPassword = false;
@@ -259,7 +265,15 @@ import { mapActions } from 'pinia';
                 } catch (error) {
                     this.errorGlobal = true;                    
                 }   
-            }
+            },
+            async searchIsAvailable(inputName, value){
+                try{
+                    const res = await axios.get(`${import.meta.env.VITE_URL_API}/user/search?${inputName}=${value}`);
+                    return res.data;
+                } catch (error) {
+                    return {error};
+                }
+            },
         }
     }
 </script>
