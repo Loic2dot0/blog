@@ -6,7 +6,11 @@ const sequelize = new Sequelize(
     process.env.DB_PASSWORD, {
         host: process.env.DB_HOST,
         dialect: process.env.DB_DIALECT,
-        logging: process.env.DB_LOG === 'ENABLED' ? console.log : false
+        logging: process.env.DB_LOG === 'ENABLED' ? console.log : false,
+        define: {
+            charset: 'utf8mb4',
+            collate: 'utf8mb4_bin'  // case sensitive
+        }
     }
 );
 
