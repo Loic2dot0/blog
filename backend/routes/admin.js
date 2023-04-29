@@ -4,6 +4,6 @@ const router = express.Router();
 const adminCtrl = require('../controllers/admin');
 
 // Routes réservée aux administrateurs
-router.get('/', adminCtrl.isAdmin);
+router.get('/:id_user', adminCtrl.getUserIsAdmin);
 
 module.exports = router;

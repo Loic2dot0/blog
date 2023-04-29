@@ -1,10 +1,10 @@
 const Admin = require('../models/Admin');
 
 // check if user is admin
-exports.isAdmin = async (req, res, next) => {
+exports.getUserIsAdmin = (req, res, next) => {
     Admin.findOne({
         where: {
-            id_user: req.body.id_user
+            id_user: req.params.id_user
         }
     })
     .then(admin => {
