@@ -174,33 +174,31 @@ exports.deleteAUser = async (req, res, next) => {
         .catch(error => res.status(500).json({error}));
 };
 
-// get user email exist
-exports.getUserEmailExist = async (req, res, next) => {
-    const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
-    const iv = CryptoJS.enc.Hex.parse(process.env.CRYPTO_IV);
+// get user search by email or name
+exports.getUserSearch = (req, res, next) => {
+    const where = {};
+    if(req.query.email){
+        const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
+        const iv = CryptoJS.enc.Hex.parse(process.env.CRYPTO_IV);
+        const email = CryptoJS.AES.encrypt(req.query.email, key, {iv: iv}).toString();
+        where.email = email;
+    } else if(req.query.name) {
+        where.name = req.query.name;
+    } else {
+        return res.status(400).json({error: 'Bad request!'});
+    }
 
     User.findOne({
-            where: {
-                email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString()
-            }
+            where: where
         })
         .then(user => {
-            if(!user) return res.status(200).json({isEmail: false});
-            res.status(200).json({isEmail: true});
-        })
-        .catch(error => res.status(500).json({error}));
-};
-
-// get user name exist
-exports.getUserNameExist = async (req, res, next) => {
-    User.findOne({
-            where: {
-                name: req.body.name
-            }
-        })
-        .then(user => {
-            if(!user) return res.status(200).json({isName: false});
-            res.status(200).json({isName: true});
+            const userInfo = {};
+            if(req.query.email){
+                userInfo.isEmail = user ? true : false
+            } else {
+                userInfo.isName = user ? true : false;
+            };            
+            res.status(200).json(userInfo);
         })
         .catch(error => res.status(500).json({error}));
 };
