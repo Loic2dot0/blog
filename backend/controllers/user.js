@@ -38,7 +38,7 @@ exports.login = async (req, res, next) => {
         
         if (!user) return res.status(401).json({error: 'User not found!'});
     } catch (error) {
-        return res.status(500).json({error: error});
+        return res.status(500).json({error});
     }
 
     bcrypt.compare(req.body.password, user.password)
@@ -68,7 +68,7 @@ exports.getUser = (req, res, next) => {
                 avatar: user.avatar
             });
         })
-        .catch(error => res.status(500).json({error: error}));
+        .catch(error => res.status(500).json({error}));
 };
 
 // update actual user
@@ -83,7 +83,7 @@ exports.updateUser = async (req, res, next) => {
         
         if (!user) return res.status(404).json({error: 'User not found!'});
     } catch (error) {
-        return res.status(500).json({error: error});
+        return res.status(500).json({error});
     }
 
     if(req.file) {
@@ -105,7 +105,7 @@ exports.updateUser = async (req, res, next) => {
                 avatar: user.avatar
             });
         })
-        .catch(error => res.status(500).json({error: error}));
+        .catch(error => res.status(500).json({error}));
 };
 
 // delete actual user
@@ -120,7 +120,7 @@ exports.deleteUser = async (req, res, next) => {
         
         if (!user) return res.status(404).json({error: 'User not found!'});
     } catch (error) {
-        return res.status(500).json({error: error});
+        return res.status(500).json({error});
     }
 
     const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
@@ -138,7 +138,7 @@ exports.deleteUser = async (req, res, next) => {
             }            
             res.status(200).json({message: 'User deleted!'});
         })
-        .catch(error => res.status(500).json({error: error}));
+        .catch(error => res.status(500).json({error}));
 };
 
 // delete a user where id_user = req.params.id_user
@@ -153,7 +153,7 @@ exports.deleteAUser = async (req, res, next) => {
         
         if (!user) return res.status(404).json({error: 'User not found!'});
     } catch (error) {
-        return res.status(500).json({error: error});
+        return res.status(500).json({error});
     }
    
    const avatarPath = user.avatar ? user.avatar.split('/upload/')[1] : null;
@@ -171,5 +171,36 @@ exports.deleteAUser = async (req, res, next) => {
             }            
             res.status(200).json({message: 'User deleted!'});
         })
-        .catch(error => res.status(500).json({error: error}));
+        .catch(error => res.status(500).json({error}));
+};
+
+// get user email exist
+exports.getUserEmailExist = async (req, res, next) => {
+    const key = CryptoJS.enc.Hex.parse(process.env.CRYPTO_KEY);
+    const iv = CryptoJS.enc.Hex.parse(process.env.CRYPTO_IV);
+
+    User.findOne({
+            where: {
+                email: CryptoJS.AES.encrypt(req.body.email, key, {iv: iv}).toString()
+            }
+        })
+        .then(user => {
+            if(!user) return res.status(200).json({isEmail: false});
+            res.status(200).json({isEmail: true});
+        })
+        .catch(error => res.status(500).json({error}));
+};
+
+// get user name exist
+exports.getUserNameExist = async (req, res, next) => {
+    User.findOne({
+            where: {
+                name: req.body.name
+            }
+        })
+        .then(user => {
+            if(!user) return res.status(200).json({isName: false});
+            res.status(200).json({isName: true});
+        })
+        .catch(error => res.status(500).json({error}));
 };
