@@ -98,25 +98,16 @@
       handleFileUpload(){
         this.file = this.$refs.file.files[0];
       },
-      handleForm(e){
+      async handleForm(e){
         e.preventDefault();
 
-        this.errorName = false;
-        this.errorMessage = null;
         this.errorGlobal = false;
         this.success = false;
 
-        if(this.userName.length < 3){
-          this.errorName = true;
-          this.errorMessage = 'Le nom doit contenir au moins 3 caractères';
-          return;
-        }
-
-        if(this.userName.length > 25){
-          this.errorName = true;
-          this.errorMessage = 'Le nom est limité à 25 caractères';
-          return;
-        }
+        if(this.userName != this.name){
+          this.errorname = await this.checkName();
+          if(this.errorName || this.errorGlobal) return;
+        }  
 
         const formData = new FormData();
         formData.append('name', this.userName);
@@ -154,6 +145,30 @@
           }).catch(err => {
             this.errorGlobal = true;
           })
+      },
+      async checkName(){
+        this.errorName = false;
+        this.errorMessage = null;
+
+        if(this.userName.length < 3 || this.userName == ''){
+          this.errorMessage = 'Le nom doit contenir au moins 3 caractères';
+          return true;
+        }
+
+        if(this.userName.length > 25){
+          this.errorMessage = 'Le nom est limité à 25 caractères';
+          return true;
+        }
+
+        try{
+          const res = await axios.get(`${import.meta.env.VITE_URL_API}/user/search?name=${this.userName}`);
+          if(res.data.isName){
+            this.errorMessage = 'Ce nom est déjà utilisé';
+            return true;
+          } else return false;
+        } catch (error) {
+          this.errorGlobal = true;
+        }    
       }
     },
     async created(){
