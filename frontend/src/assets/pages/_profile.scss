@@ -11,6 +11,7 @@
 .profile-view{
     margin-bottom: 1rem;
     text-align: center;
+
     @include tablet{
         grid-column: 1 / 2;
     }
@@ -42,6 +43,11 @@
             font-weight: 600;
             overflow-wrap: anywhere;
         }
+    }
+
+    &__button{
+        margin-bottom: 1rem;
+        line-height: 2.5rem;
     }
 }
 

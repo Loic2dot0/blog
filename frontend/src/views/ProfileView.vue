@@ -10,8 +10,14 @@
         </svg>
         <p class="profile-card__name">{{ name }}</p>
       </div>
+
+      <p class="profile-view__button">
+        <RouterLink v-if="isAdmin" to="/dashboard" class="button">Accéder au dashboard</RouterLink>
+      </p>
       
-      <button @click="logout" class="button button--danger">Me déconnecter</button>
+      <p class="profile-view__button">
+        <button @click="logout" class="button button--danger">Me déconnecter</button>
+      </p>      
     </aside>
 
     <div class="profile-option">
@@ -73,6 +79,7 @@
         errorGlobal: false,
         success: false,
         modalConfirm: false,
+        isAdmin: false,
       }
     },
     computed: {
@@ -87,7 +94,7 @@
       }
     },
     methods: {
-      ...mapActions(useUserStore, ['getUser', 'logout']),
+      ...mapActions(useUserStore, ['getUser', 'logout', 'getUserIsAdmin']),
       handleFileUpload(){
         this.file = this.$refs.file.files[0];
       },
@@ -148,6 +155,9 @@
             this.errorGlobal = true;
           })
       }
+    },
+    async created(){
+      this.isAdmin = await this.getUserIsAdmin();
     }
   }
 </script>
