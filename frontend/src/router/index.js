@@ -44,33 +44,58 @@ const router = createRouter({
     {
       path: '/login',
       name: 'login',
-      component: () => import('../views/LoginView.vue')
+      component: () => import('../views/LoginView.vue'),
+      beforeEnter: (to, from, next) => {
+        const userStore = useUserStore();
+        if(userStore.userId && userStore.token){
+          next({ name: 'profile' });
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/signup',
       name: 'signup',
-      component: () => import('../views/SignupView.vue')
+      component: () => import('../views/SignupView.vue'),
+      beforeEnter: (to, from, next) => {
+        const userStore = useUserStore();
+        if(userStore.userId && userStore.token){
+          next({ name: 'profile' });
+        } else {
+          next();
+        }
+      }
     },
     {
       path: '/profile',
       name: 'profile',
       meta: { requiresAuth: true },
       component: () => import('../views/ProfileView.vue')
+    },
+    // Route Admin
+    {
+      path: '/dashboard',
+      name: 'dashboard',
+      meta: { requiresAuth: true, requiresAdmin: true },
+      component: () => import('../views/AdminDashboardView.vue')
     }
   ]
 })
 
-router.beforeEach((to, from, next) => {
+router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
   const userId = userStore.userId;
   const token = userStore.token;
+  const admin = await userStore.getUserIsAdmin();
   
   if(to.meta.requiresAuth && (!userId || !token)) {
     next({ name: 'login' });
+  } else if(to.meta.requiresAdmin && !admin) {
+    next({ name: 'home' });
   } else {
     next();
   }
 });
-
 
 export default router
