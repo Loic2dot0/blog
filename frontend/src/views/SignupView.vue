@@ -226,13 +226,13 @@ import { mapActions } from 'pinia';
                 }
                 this.validPasswordConfirm = true;
             },
-            handleForm(e){
+            async handleForm(e){
                 e.preventDefault();
                 this.errorGlobal = false;
                 this.success = false;
 
-                this.checkEmail();
-                this.checkName();
+                await this.checkEmail();
+                await this.checkName();
                 this.checkPassword();
                 this.checkPasswordConfirm();
 
