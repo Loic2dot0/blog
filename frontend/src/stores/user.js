@@ -59,6 +59,16 @@ export const useUserStore = defineStore('user', {
             this.avatar = null;
             localStorage.clear();
             router.push('/login');
+        },
+        async getUserIsAdmin(){
+            try{
+                const res = await axios.get(`${import.meta.env.VITE_URL_API}/admin/${this.userId}`);
+                return res.data.isAdmin ? true : false;
+            }
+            catch(err){
+                console.log(err);
+                return false;
+            }
         }
     },
 });
