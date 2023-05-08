@@ -67,8 +67,12 @@ exports.getPostsFull = (req, res, next) => {
     const limitDefault = 10;
     let limit = req.query.limit ? parseInt(req.query.limit) : limitDefault;
     limit = limit > 25 ? 25 : limit;
+    let publish = null;
+    if(req.query.publish && req.query.publish == 'true') publish = true;
+    if(req.query.publish && req.query.publish == 'false') publish = false;
     const where = {};
     if(req.query.category) where.id_category = req.query.category == 'null' ? null : req.query.category;
+    if(publish != null) where.publish = publish;
 
     Post.findAndCountAll({
             where,
@@ -83,7 +87,7 @@ exports.getPostsFull = (req, res, next) => {
             order: [['publish', 'ASC'],
                     ['updatedAt', 'DESC']],
             limit,
-            offset: (page - 1) * 10,
+            offset: (page - 1) * limit,
         })
         .then(posts => {
             posts.postsByPage = limit;
