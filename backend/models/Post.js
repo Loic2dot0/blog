@@ -16,14 +16,18 @@ const Post = sequelize.define('Post', {
     id_category: {  // id de la catégorie  (clé étrangère)
         type: DataTypes.UUID,
         defaultValue: null,
-    },          
+    },        
     title: {
         type: DataTypes.STRING,
         allowNull: false,
     },      
     content: {
         type: DataTypes.TEXT,
-    },  
+    },
+    picture: {
+        type: DataTypes.STRING,
+        defaultValue: null,
+    },    
     publish: {
         type: DataTypes.BOOLEAN,
         defaultValue: false,
