@@ -6,4 +6,55 @@
 .dashboard-table{
     margin: 1rem auto;
     width: 100%;
+    border-spacing: 0;
+
+    thead{
+        display: none;
+
+        @include tablet{
+            display: table-header-group;
+        }
+    }
+
+    tbody{
+        tr{
+            display: flex;
+            flex-direction: column;
+            text-align: center;
+
+            @include tablet{
+                display: table-row;
+            }
+
+            &:nth-child(2n + 1){
+                background-color: #f1f1f1;
+            }
+        }
+    }
+
+    td{
+        padding: 0.2rem;
+    }
+
+    &__title{
+        
+        @include tablet{
+            text-align: left;
+        }
+    }
+
+    &__category{
+        
+        @include tablet{
+            width: 25%;
+        }
+    }
+
+    &__action{
+        
+        @include tablet{
+            width: calc(3.5rem * 3);
+        }
+    }
+
 }

@@ -85,6 +85,7 @@
     margin: 0 0.1rem;
     cursor: pointer;
     transition: border 0.4s ease-in-out;
+    background-color: $color-primary;
 
     svg{
         width: 100%;
@@ -97,5 +98,21 @@
 
     &--danger{
         background-color: lighten($error, 35%);
+        color: $error;
+        border: solid 1px lighten($error, 35%);
+
+        &:hover{
+            border: solid 1px $error;
+        }
+    }
+
+    &--success{
+        background-color: lighten($success, 55%);
+        color: $success;
+        border: solid 1px lighten($success, 55%);
+
+        &:hover{
+            border: solid 1px $success;
+        }
     }
 }
