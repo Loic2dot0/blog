@@ -9,6 +9,7 @@ exports.createPost = (req, res, next) => {
             id_category: req.body.id_category && req.body.id_category != '' ? req.body.id_category : null,
             title: req.body.title,
             content: req.body.content,
+            picture: req.body.picture && req.body.picture != '' ? req.body.picture : null,
         })
         .then(() => res.status(201).json({message: 'Post created!'}))
         .catch(error => res.status(500).json({error: error}));
@@ -32,6 +33,7 @@ exports.updatePost = async (req, res, next) => {
     if(req.body.title) post.title = req.body.title;
     if(req.body.content) post.content = req.body.content;
     if(req.body.publish) post.publish = req.body.publish;
+    if(req.body.picture) post.picture = req.body.picture != '' ? req.body.picture : null;
     
     post.save()
         .then(() => res.status(200).json({message: 'Post modified!', publish : post.publish}))
@@ -82,7 +84,7 @@ exports.getPostsFull = (req, res, next) => {
             },
             {
                 model: User,
-                attributes: ['name']
+                attributes: ['name', 'avatar']
             }],
             order: [['publish', 'ASC'],
                     ['updatedAt', 'DESC']],
@@ -108,7 +110,7 @@ exports.getOnePostFull = (req, res, next) => {
             },
             {
                 model: User,
-                attributes: ['name']
+                attributes: ['name', 'avatar']
             }],
         })
         .then(post => {
@@ -137,7 +139,7 @@ exports.getPosts = (req, res, next) => {
             },
             {
                 model: User,
-                attributes: ['name']
+                attributes: ['name', 'avatar']
             }],
             order: [['updatedAt', 'DESC']],
             limit,
@@ -163,7 +165,7 @@ exports.getOnePost = (req, res, next) => {
             },
             {
                 model: User,
-                attributes: ['name']
+                attributes: ['name', 'avatar']
             }],
         })
         .then(post => {
