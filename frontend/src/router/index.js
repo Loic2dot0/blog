@@ -80,19 +80,19 @@ const router = createRouter({
       name: 'dashboard',
       meta: { requiresAuth: true, requiresAdmin: true },
       component: () => import('../views/AdminDashboardView.vue'),
-    },
-    {
-      path: '/dashboard/post',
-      name: 'adminPost',
-      meta: { requiresAuth: true, requiresAdmin: true },
-      component: () => import('../views/AdminPostView.vue'),
-    },
-    {
-      path: '/dashboard/post/write',
-      name: 'AdminPostWrite',
-      meta: { requiresAuth: true, requiresAdmin: true },
-      component: () => import('../views/AdminPostWriteView.vue'),
-    },    
+      children: [
+        {
+          path: 'post',
+          name: 'adminPost',
+          component: () => import('../views/AdminPostView.vue'),
+        },
+        {
+          path: 'post/write',
+          name: 'AdminPostWrite',
+          component: () => import('../views/AdminPostWriteView.vue'),
+        },
+      ]
+    }   
   ]
 });
 
