@@ -16,16 +16,19 @@ const router = createRouter({
       name: 'post',
       component: PostView,
       redirect: '/post/page1',
-    },
-    {
-      path: '/post/page:pageNumber',
-      name: 'postpage',
-      component: PostView
-    },{
-      path: '/post/:id_post',
-      name: 'postone',
-      component: () => import('../views/PostOneView.vue'),
-    },
+      children: [
+        {
+          path: 'page:pageNumber',
+          name: 'postpage',
+          component: PostView
+        },
+        {
+          path: '/post/:id_post',
+          name: 'postone',
+          component: () => import('../views/PostOneView.vue'),
+        },
+      ]
+    },    
     {
       path: '/photos',
       name: 'photos',
@@ -78,10 +81,26 @@ const router = createRouter({
       path: '/dashboard',
       name: 'dashboard',
       meta: { requiresAuth: true, requiresAdmin: true },
-      component: () => import('../views/AdminDashboardView.vue')
-    }
+      component: () => import('../views/AdminDashboardView.vue'),
+      children: [
+        {
+          // Route post
+          path: '/post',
+          name: 'adminPost',
+          component: () => import('../views/AdminPostView.vue'),
+          children: [
+            {
+              path: 'write',
+              name: 'AdminPostWrite',
+              component: () => import('../views/AdminPostWriteView.vue'),
+            },
+          ]
+        },
+      ]
+    },
+    
   ]
-})
+});
 
 router.beforeEach(async (to, from, next) => {
   const userStore = useUserStore();
