@@ -16,18 +16,16 @@ const router = createRouter({
       name: 'post',
       component: PostView,
       redirect: '/post/page1',
-      children: [
-        {
-          path: 'page:pageNumber',
-          name: 'postpage',
-          component: PostView
-        },
-        {
-          path: '/post/:id_post',
-          name: 'postone',
-          component: () => import('../views/PostOneView.vue'),
-        },
-      ]
+    },
+    {
+      path: '/post/page:pageNumber',
+      name: 'postpage',
+      component: PostView
+    },
+    {
+      path: '/post/:id_post',
+      name: 'postone',
+      component: () => import('../views/PostOneView.vue'),
     },    
     {
       path: '/photos',
@@ -82,23 +80,19 @@ const router = createRouter({
       name: 'dashboard',
       meta: { requiresAuth: true, requiresAdmin: true },
       component: () => import('../views/AdminDashboardView.vue'),
-      children: [
-        {
-          // Route post
-          path: '/post',
-          name: 'adminPost',
-          component: () => import('../views/AdminPostView.vue'),
-          children: [
-            {
-              path: 'write',
-              name: 'AdminPostWrite',
-              component: () => import('../views/AdminPostWriteView.vue'),
-            },
-          ]
-        },
-      ]
     },
-    
+    {
+      path: '/dashboard/post',
+      name: 'adminPost',
+      meta: { requiresAuth: true, requiresAdmin: true },
+      component: () => import('../views/AdminPostView.vue'),
+    },
+    {
+      path: '/dashboard/post/write',
+      name: 'AdminPostWrite',
+      meta: { requiresAuth: true, requiresAdmin: true },
+      component: () => import('../views/AdminPostWriteView.vue'),
+    },    
   ]
 });
 
