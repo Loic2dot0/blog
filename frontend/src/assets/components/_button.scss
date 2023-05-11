@@ -55,6 +55,15 @@
     color: $textdark;
     transition: border 0.4s ease-in-out;
 
+    &.router-link-exact-active{
+        border: solid 1px $color-secondary;
+        color: $color-secondary;
+
+        svg{
+            fill: $color-secondary;
+        }
+    }
+
     @include tablet{
         margin: 1rem;
     }
