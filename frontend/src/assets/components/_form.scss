@@ -87,6 +87,15 @@
         border: solid 1px lighten($textdark, 70%);
         border-radius: 0.2rem;
     }
+
+    input.error{
+        border: solid 1px $error;
+        background-color: lighten($error, 35%);
+    }
+    
+    textarea{
+        resize: none;
+    }
     
     &__group{
         display: flex;
