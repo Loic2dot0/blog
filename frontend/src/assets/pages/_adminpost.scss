@@ -1,0 +1,12 @@
+.post-preview{
+    &__picture{
+        position: relative;
+
+        button{
+            position: absolute;
+            top: 0.5rem;
+            right: 0.5rem;
+            background-color: $color-primary;
+        }
+    }
+}
