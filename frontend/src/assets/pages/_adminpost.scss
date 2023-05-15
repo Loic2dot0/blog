@@ -1,6 +1,7 @@
 .post-preview{
     &__picture{
         position: relative;
+        min-height: 3rem;
 
         button{
             position: absolute;

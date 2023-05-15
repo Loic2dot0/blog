@@ -1,11 +1,49 @@
 <template>
     <h2>Éditeur</h2>
 
-   
+    <form class="form-admin">
+        <div class="form-admin__group">
+            <label for="title">Titre de l'article</label>
+            <input type="text" id="title" v-model="post.title">
+        </div>
+        <div class="form-admin__group">
+            <label for="picture">Image de couverture</label>
+            <div class="form-admin__inputmedia">
+                <input type="text" id="picture" v-model="post.picture" disabled>
+                <button type="button" class="button">Choisir une image</button>
+            </div>
+        </div>
+        <div class="form-admin__group" v-if="categories.length != 0">
+            <label for="category">Catégorie</label>
+            <select name="category" id="category" v-model="post.id_category">
+                <option v-for="(category, index) in categories" :key="index" :value="category.id_category">
+                    {{ category.category }}
+                </option>
+                <option value="null">Sans catégorie</option>
+            </select>
+        </div>
+        <div class="form-admin__group">
+            <label for="publish">Statut</label>
+            <select name="publish" id="publish" v-model="post.publish">
+                <option value="true">Publier</option>
+                <option value="false">Brouillon</option>
+            </select>
+        </div>
+        <div class="form-admin__group">
+            <label for="content">Contenu de l'article</label>
+            <textarea name="content" id="content" cols="30" rows="10" v-model="post.content"></textarea>
+        </div>
+        <div class="form-admin__submit">
+            <button type="submit" class="button">Enregister</button>
+        </div>
+        
+    </form>
+
+    <h2>Aperçu de l'article</h2>
 
     <article class="post post-preview">
         <div class="post-preview__picture">
-            <button class="button" @click="togglePicture = !togglePicture">
+            <button type="button" class="button" @click="togglePicture = !togglePicture">
                 <span v-if="togglePicture">Masquer l'image</span>
                 <span v-else>Afficher l'image</span>
             </button>
@@ -29,7 +67,7 @@
             </div>
             <div class="meta">
                 <p class="meta__date">Publié le {{ formatDate(new Date) }}</p>
-                <p class="meta__category" v-if="post.id_category">{{ post.id_category }}</p>
+                <p class="meta__category" v-if="post.id_category && post.id_category != 'null'">{{ getCategoryName(post.id_category) }}</p>
                 <p class="meta__category" v-else>Sans catégorie</p>
             </div>
         </div>
@@ -52,6 +90,7 @@
                     title: null,
                     content: null,
                     id_category: null,
+                    publish: 'false',
                 },
                 categories: [],
                 togglePicture: true,
@@ -74,6 +113,10 @@
                         console.log(error);
                     })
             },
+            getCategoryName(id) {
+                const category = this.categories.find(category => category.id_category === id);
+                return category.category;
+            }
         },
         created() {
             this.getCategories();
