@@ -10,6 +10,7 @@ exports.createPost = (req, res, next) => {
             title: req.body.title,
             content: req.body.content,
             picture: req.body.picture && req.body.picture != '' ? req.body.picture : null,
+            publish: req.body.publish ? req.body.publish : false,
         })
         .then(() => res.status(201).json({message: 'Post created!'}))
         .catch(error => res.status(500).json({error: error}));
